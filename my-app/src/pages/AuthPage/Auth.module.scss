@@ -1,0 +1,15 @@
+@import '../../styles/variables.module.scss';
+
+.form {
+    min-height: 400px;
+    height: fit-content;
+    min-width: 500px;
+    width: 40%;
+    max-width: 800px;
+    margin: $indent-large auto;
+
+}
+
+.orSpan {
+    padding-inline: $indent-medium $indent-xsmall;
+}

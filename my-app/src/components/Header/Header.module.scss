@@ -1,0 +1,57 @@
+@import '../../styles/variables.module.scss';
+
+.collapsedButton {
+    position: fixed;
+    left: 10px;
+    top: 16px;
+    padding: 5px 8px;
+}
+
+.menuIcon {
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.logo__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 64px;
+    margin-left: $indent-large;
+}
+
+.catalog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span, p {
+        font-size: $fontSize-small;
+
+        svg {
+            width: 30px;
+            height: 30px;
+        }
+    }
+    p {
+        padding-inline-start: 6px;
+        display: inline-block;
+        position: relative;
+        bottom: 6px;
+    }
+}
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    width: 35%;
+    max-width: 600px;
+    height: 64px;
+}
+
+.menu {
+    justify-self: flex-end;
+}

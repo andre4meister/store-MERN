@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+// FONT
+$fontFamily: 'Mulish', sans-serif;
+// $fontFamily: 'Alfa Slab One';
+$fontWeight-normal: 400;
+$fontWeight-bold: 700;
+$fontSize-xxsmall: 12px;
+$fontSize-xsmall: 15px;
+$fontSize-small: 18px;
+$fontSize-medium: 24px;
+$fontSize-large: 30px;
+
+// COLORS
+$color-textLight: #001f3f;
+$color-textDark: rgb(221, 221, 221);
+
+$color-mainLight: #f4f4f4;
+$color-light1: #cfcfcf;
+$color-light2: #ffffff;
+
+$color-mainDark: #18191a;
+$color-dark1: #0d0e0e;
+$color-dark2: #232526;
+
+$loader-light: #ffffff;
+$loader-dark: #fec602;
+
+$color-orange: #ba2d0b;
+$color-yellow: #fec602;
+
+// NOTIFICATIONS
+$successBackgroundColor: #eaf7ee;
+$successBorderColor: #d3e6d8;
+$successTextColor: #3bb65d;
+
+$infoBackgroundColor: #e5effa;
+$infoBorderColor: #c7d6e7;
+$infoTextColor: #016ce2;
+
+$errorBackgroundColor: #fcede9;
+$errorBorderColor: #edd4ce;
+$errorTextColor: #ea4e2c;
+
+// OTHERS
+$blur: 6px;
+$borderRadius: 10px;
+$borderRadiusBigger: 40px;
+$pill-radius: 2rem;
+$circle: 50%;
+
+// ANIMATION
+$transition: 0.2s ease-in-out;
+$transition-slow: 0.6s ease-in-out;
+
+// MARGIN & PADDING
+$indent-xsmall: 5px;
+$indent-small: 10px;
+$indent-smedium: 15px;
+$indent-medium: 20px;
+$indent-large: 30px;
+
+// SIZES
+$size-sidebarWidth: 260px;
