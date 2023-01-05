@@ -1,6 +1,7 @@
 import { WithToken } from 'store/commonTypes';
 import { UpdateUserType, WithIdType } from 'store/user/user';
 import { UserType } from 'store/user/user-types';
+import getToken from 'utils/getToken';
 import axiosInstance from './axios';
 
 export interface LoginFormType {
@@ -54,6 +55,8 @@ export class UserAPI {
   }
 
   static async updatePersonalInfo(data: UpdateUserType) {
+    const token = getToken();
+    const body = { token };
     try {
       const response = await axiosInstance.put<UserType>(`users/${data._id}`, JSON.stringify(data));
       return response;

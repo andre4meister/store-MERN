@@ -31,6 +31,7 @@ const cors_1 = __importDefault(require("cors"));
 const user_router_1 = require("./user-model/user-router");
 const auth_router_1 = require("./authorization/auth-router");
 const mongoose_1 = __importDefault(require("mongoose"));
+const item_router_1 = require("./product-model/item-router");
 const mongoConnectURL = 'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5000;
 const app = (0, express_1.default)();
@@ -39,7 +40,8 @@ app
     .use((0, cors_1.default)({ origin: '*' }))
     // .use(parseURL)
     .use('/users', user_router_1.userRouter)
-    .use('/auth', auth_router_1.authRouter);
+    .use('/auth', auth_router_1.authRouter)
+    .use('/items', item_router_1.itemRouter);
 const start = async () => {
     try {
         await mongoose_1.default.connect(mongoConnectURL);

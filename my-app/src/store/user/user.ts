@@ -105,15 +105,15 @@ export const fetchUpdatePersonalInfo = createAsyncThunk<void, UpdateUserType>(
   'user/update-info',
   async (data, thunkAPI) => {
     try {
-      thunkAPI.dispatch(toggleIsLoading(false));
+      thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.updatePersonalInfo(data)) as AxiosResponse<UserType>;
+
       if (response?.status === 200) {
         // WIP alert thunkAPI.dispatch();
-        console.log(response);
         thunkAPI.dispatch(login(response.data));
       } else {
         // WIP read error
-        thunkAPI.dispatch(loginFailure('Incorrect values or user with this email/userName already exists'));
+        thunkAPI.dispatch(loginFailure('expire token'));
       }
       thunkAPI.dispatch(toggleIsLoading(false));
     } catch (error) {
@@ -127,7 +127,7 @@ export const fetchUpdatePassword = createAsyncThunk<void, UpdateUserType>(
   'user/change-password',
   async (data, thunkAPI) => {
     try {
-      thunkAPI.dispatch(toggleIsLoading(false));
+      thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.updatePassword(data)) as AxiosResponse<UserType>;
       if (response?.status === 200) {
         // WIP alert thunkAPI.dispatch();
@@ -147,7 +147,7 @@ export const fetchUpdatePassword = createAsyncThunk<void, UpdateUserType>(
 
 export const fetchDeleteAccount = createAsyncThunk<void, WithIdType>('user/delete-account', async (data, thunkAPI) => {
   try {
-    thunkAPI.dispatch(toggleIsLoading(false));
+    thunkAPI.dispatch(toggleIsLoading(true));
     const response = (await UserAPI.deleteAccount(data)) as AxiosResponse<UserType>;
     if (response?.status === 200) {
       // WIP alert thunkAPI.dispatch();
@@ -173,6 +173,23 @@ export const dispatchLoginFailure = createAsyncThunk<void, string>(
     }
   },
 );
+
+export const fetchGetProfile = createAsyncThunk<void, void>('user/get-profile', async (data, thunkAPI) => {
+  try {
+    thunkAPI.dispatch(toggleIsLoading(true));
+    const userData = JSON.parse(localStorage.getItem('userData') || '') as UserType;
+    const response = (await UserAPI.getUserById(userData._id)) as AxiosResponse<UserType>;
+
+    if (response.status === 200) {
+      thunkAPI.dispatch(login(response.data));
+    } else {
+      thunkAPI.dispatch(loginFailure('expire token'));
+    }
+    thunkAPI.dispatch(toggleIsLoading(false));
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 export const { login, loginFailure, logout, toggleIsLoading } = userReducer.actions;
 

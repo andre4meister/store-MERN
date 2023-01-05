@@ -1,4 +1,5 @@
-import { Schema } from 'mongoose';
+/* eslint-disable @typescript-eslint/ban-types */
+import { Model, Schema } from 'mongoose';
 import { itemScheme, ItemType } from '../product-model/item-types';
 
 export enum ShipmentMethodType {
@@ -35,6 +36,10 @@ interface UserType {
   basket: ItemType[];
 }
 
+interface UserMethods {
+  deletePassword(): Omit<UserType, 'password'>;
+}
+
 const deliverySchema = new Schema<DeliverMethodType>({
   country: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
   city: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
@@ -42,7 +47,7 @@ const deliverySchema = new Schema<DeliverMethodType>({
   chosenDepartment: { type: Number, required: true },
 });
 
-const userSchema = new Schema<UserType>({
+const userSchema = new Schema<UserType, Model<UserType, {}, UserMethods>, UserMethods>({
   userName: {
     type: String,
     required: true,
@@ -65,4 +70,10 @@ const userSchema = new Schema<UserType>({
   basket: [itemScheme],
 });
 
-export { userSchema, UserType, DeliverMethodType };
+userSchema.methods.deletePassword = function (): Omit<UserType, 'password'> {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
+export { userSchema, UserType, DeliverMethodType, UserMethods };

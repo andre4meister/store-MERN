@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import store from 'store/store';
-import { dispatchLoginFailure, loginFailure } from 'store/user/user';
+import { dispatchLoginFailure } from 'store/user/user';
 
 const tokenFromLocalStorage = localStorage.getItem('token');
 const token = tokenFromLocalStorage && (JSON.parse(tokenFromLocalStorage) as string);
@@ -20,15 +19,20 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error: AxiosError) => error,
+  (error: AxiosError) => {
+    const response = error.response;
+    return response;
+  },
 );
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      dispatchLoginFailure('expire token');
+  (error: AxiosError<{ message: string; error: string }>) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      dispatchLoginFailure(error.response?.data.error);
     }
+    const response = error.response;
+    return response;
   },
 );
 

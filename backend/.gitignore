@@ -119,9 +119,7 @@ dist
 /coverage
 
 # production
-/backend/build
 /build
-/my-app/build
 
 # If you are using PyCharm # 
 # User-specific stuff

@@ -10,13 +10,14 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized', error: 'expire token' });
     }
 
-    const decodedData = jwt.sign(token, secretJWT);
+    const decodedData = jwt.verify(token, secretJWT);
     req.body.decodedData = decodedData;
     next();
   } catch (error) {
-    res.status(403).json({ message: 'Unauthorized' });
+    console.log(error);
+    res.status(403).json({ message: 'Invalid token', error });
   }
 }

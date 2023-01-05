@@ -1,11 +1,11 @@
 import { Handler, Response } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 // import { Query } from 'express-serve-static-core';
 
-import { userSchema } from './user-types';
+import { UserMethods, userSchema, UserType } from './user-types';
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model<UserType, Model<UserType, any, UserMethods>>('user', userSchema);
 
 // interface TypedRequest<T extends Query, U> extends Express.Request {
 //   body: U;
@@ -16,7 +16,7 @@ const getUsers: Handler = async (req, res: Response) => {
   try {
     let users;
     if (req.params.id) {
-      users = await User.findById({ _id: req.params.id });
+      users = await User.findById(req.params.id);
 
       if (!users) {
         return res.status(404).send({ message: 'Such user doesn`t exist' });
@@ -27,6 +27,7 @@ const getUsers: Handler = async (req, res: Response) => {
     users = await User.find();
     res.status(200).json(users);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
   }
 };
@@ -40,7 +41,10 @@ const updateUser: Handler = async (req, res) => {
     let user = await User.findOne({ _id: req.body._id });
 
     if (!!user) {
-      user = await User.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true, upsert: true });
+      user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        upsert: true,
+      });
       res.status(200).json(user);
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -85,7 +89,7 @@ const deleteUser: Handler = async (req, res) => {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    const user = await User.findByIdAndDelete({ _id: req.params.id });
+    const user = await User.findByIdAndDelete(req.params.id);
     if (!!user) {
       return res.status(200).json(user);
     } else {

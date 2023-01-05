@@ -78,7 +78,7 @@ const login: RequestHandler<
     if (!isMatch) {
       return res.status(401).json({ message: 'Incorrect password or email' });
     } else {
-      const token = jwt.sign({ userId: userData.id }, secretJWT, { expiresIn: '1h' });
+      const token = jwt.sign({ email, password, _id: userData._id }, secretJWT, { expiresIn: '1h' });
       res.json({ token, userData });
     }
   } catch (error) {

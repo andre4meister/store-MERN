@@ -1,4 +1,3 @@
-import { WithToken } from 'store/commonTypes';
 import { ItemType } from 'store/item/item-types';
 import axiosInstance from './axios';
 

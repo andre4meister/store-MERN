@@ -22,6 +22,10 @@ const SettingsPage = () => {
     }
   }, [location]);
 
+  if (!isAuth) {
+    return <h1>You should login to see this page</h1>;
+  }
+
   return (
     <Row className={styles.container}>
       <Col span={5} push={0} className={styles.menu}>
