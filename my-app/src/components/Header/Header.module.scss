@@ -21,6 +21,7 @@
     width: 200px;
     height: 64px;
     margin-left: $indent-large;
+    cursor: pointer;
 }
 
 .catalog {
@@ -54,4 +55,24 @@
 
 .menu {
     justify-self: flex-end;
+}
+
+@media screen and (max-width: 1285px) {
+    .logo__image {
+        width: 52px;
+        height: 64px;
+
+        img {
+            width: 44px;
+            height: 42px;
+            object-fit: cover;
+            object-position: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .catalog {
+        display: none;
+    }
 }

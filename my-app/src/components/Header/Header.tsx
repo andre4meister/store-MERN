@@ -28,7 +28,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
   };
   return (
     <>
-      <div className={styles.logo__image}>
+      <div className={styles.logo__image} onClick={() => navigate('/')}>
         <img src="https://content2.rozetka.com.ua/widget_logotype/full/original/229862237.svg" alt="Buything logo" />
       </div>
       <Button onClick={() => setIsCollapsed((prev) => !prev)} className={styles.collapsedButton}>
@@ -57,7 +57,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
           </NavLink>
         </Menu.Item>
         <Menu.Item key="user">
-          <NavLink to="settings">
+          <NavLink to="/settings/user-info">
             <UserOutlined className={styles.menuIcon} />
           </NavLink>
         </Menu.Item>

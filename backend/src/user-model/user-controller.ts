@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 // import { Query } from 'express-serve-static-core';
 
 import { UserMethods, userSchema, UserType } from './user-types';
+import { deletePassword } from '../utils/deletePassword';
 
 const User = mongoose.model<UserType, Model<UserType, any, UserMethods>>('user', userSchema);
 
@@ -21,11 +22,11 @@ const getUsers: Handler = async (req, res: Response) => {
       if (!users) {
         return res.status(404).send({ message: 'Such user doesn`t exist' });
       }
-      return res.status(200).send(users);
+      return res.status(200).send(deletePassword(users._doc));
     }
 
     users = await User.find();
-    res.status(200).json(users);
+    res.status(200).json(deletePassword(users));
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
@@ -38,14 +39,14 @@ const updateUser: Handler = async (req, res) => {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findOne({ _id: req.body._id });
+    let user = await User.findById(req.params.id);
 
     if (!!user) {
       user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         upsert: true,
       });
-      res.status(200).json(user);
+      return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
     }
@@ -74,7 +75,7 @@ const updateUserPassword: Handler = async (req, res) => {
 
       const newHashedPassword = await bcrypt.hash(req.body.new, 12);
       user = await User.findByIdAndUpdate(req.params.id, { password: newHashedPassword }, { new: true });
-      res.status(200).json(user);
+      res.status(200).json(user._doc);
     } else {
       res.status(400).json({ message: 'Incorrect old password' });
     }
@@ -91,7 +92,7 @@ const deleteUser: Handler = async (req, res) => {
 
     const user = await User.findByIdAndDelete(req.params.id);
     if (!!user) {
-      return res.status(200).json(user);
+      return res.status(200).json(user._doc);
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
     }

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { Model, Schema } from 'mongoose';
-import { itemScheme, ItemType } from '../product-model/item-types';
+import { Schema } from 'mongoose';
+import { ItemType } from '../product-model/item-types';
 
 export enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',
@@ -43,37 +42,53 @@ interface UserMethods {
 const deliverySchema = new Schema<DeliverMethodType>({
   country: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
   city: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
-  // postMethod: ShipmentMethodType,
+  postMethod: { type: String, enum: ShipmentMethodType, required: true },
   chosenDepartment: { type: Number, required: true },
 });
 
-const userSchema = new Schema<UserType, Model<UserType, {}, UserMethods>, UserMethods>({
+const userSchema = new Schema({
   userName: {
     type: String,
     required: true,
     unique: true,
     validate: { validator: (v: string) => v.length >= 8 && v.length <= 16 },
   },
-  firstName: { type: String, required: true, validate: { validator: (v: string) => v.length >= 8 && v.length <= 16 } },
-  lastName: { type: String, required: true, validate: { validator: (v: string) => v.length >= 8 && v.length <= 16 } },
-  // role: RoleEnum,
+  firstName: { type: String, sparse: true },
+  lastName: { type: String, sparse: true },
+  role: { type: String, enum: RoleEnum },
   email: {
     type: String,
     required: true,
     unique: true,
-    validate: { validator: (v: string) => v.length >= 8 && v.length <= 24 },
+    validate: { validator: (v: string) => v.length >= 8 && v.length <= 24, message: 'Too long or short password' },
   },
-  password: { type: String, required: true, validate: { validator: (v: string) => v.length >= 8 && v.length <= 20 } },
-  phone: { type: String, unique: true, validate: { validator: (v: string) => v.length >= 10 && v.length <= 15 } },
-  deliveryMethod: [deliverySchema],
-  likedItems: [itemScheme],
-  basket: [itemScheme],
+  password: { type: String, required: true },
+  phone: { type: String },
+  // deliveryMethod: { type: [deliverySchema], required: false },
+  likedItems: [
+    {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: 'item',
+      sparse: true,
+      partialFilterExpression: { name: { $exists: true } },
+    },
+  ],
+  basket: [
+    {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: 'item',
+      sparse: true,
+      partialFilterExpression: { name: { $exists: true } },
+    },
+  ],
 });
 
-userSchema.methods.deletePassword = function (): Omit<UserType, 'password'> {
-  const obj = this.toObject();
+userSchema.method('deletePassword', function deletePassword() {
+  const obj: Partial<UserType> = { ...this.toObject() };
   delete obj.password;
   return obj;
-};
+});
 
 export { userSchema, UserType, DeliverMethodType, UserMethods };

@@ -15,22 +15,20 @@ import AllProfileSettings from 'components/ProfileSettings/ProfileSettings';
 
 const router = createHashRouter(
   createRoutesFromElements(
-    <Route>
-      <Route path="/" element={<Layout />}>
-        <Route path="item" element={<ItemPage />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="order" element={<OrderPage />} />
-        <Route path="settings" element={<SettingsPage />}>
-          <Route path="user-info" element={<AllProfileSettings />} />
-          {settingsMenuItems.map((item) => {
-            return <Route path={item.url} element={item.element} key={item.name} />;
-          })}
-        </Route>
-        <Route path="registration" element={<RegistrationForm />} />
-        <Route path="login" element={<LoginForm />} />
-        <Route path="" element={<Dashboard />} errorElement={<h2>Error</h2>} />
-        <Route path="*" element={<NotFoundPage />} />
+    <Route path="/" element={<Layout />}>
+      <Route path="item/:id" element={<ItemPage />} />
+      <Route path="cart" element={<CartPage />} />
+      <Route path="order" element={<OrderPage />} />
+      <Route path="settings" element={<SettingsPage />}>
+        <Route path="user-info" element={<AllProfileSettings />} />
+        {settingsMenuItems.map((item) => {
+          return <Route path={item.url} element={item.element} key={item.name} />;
+        })}
       </Route>
+      <Route path="registration" element={<RegistrationForm />} />
+      <Route path="login" element={<LoginForm />} />
+      <Route index element={<Dashboard />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
 );

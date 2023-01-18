@@ -4,6 +4,8 @@ import { userRouter } from './user-model/user-router';
 import { authRouter } from './authorization/auth-router';
 import mongoose from 'mongoose';
 import { itemRouter } from './product-model/item-router';
+import { subCategoryRouter } from './subCategoty-model/subCategory-router';
+import { categoryRouter } from './category-model/category-router';
 
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
@@ -13,9 +15,10 @@ const app = express();
 app
   .use(json())
   .use(cors({ origin: '*' }))
-  // .use(parseURL)
   .use('/users', userRouter)
   .use('/auth', authRouter)
+  .use('/category', categoryRouter)
+  .use('/subCategory', subCategoryRouter)
   .use('/items', itemRouter);
 
 const start = async () => {

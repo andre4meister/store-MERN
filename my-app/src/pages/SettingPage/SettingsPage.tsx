@@ -18,7 +18,7 @@ const SettingsPage = () => {
 
   useEffect(() => {
     if (location.pathname === '/settings') {
-      navigate('user-info');
+      navigate('user-info', { replace: true });
     }
   }, [location]);
 

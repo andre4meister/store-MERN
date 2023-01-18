@@ -5,6 +5,8 @@ import { UserType } from '../user-model/user-types';
 import { ValidationError, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import secretJWT from '../utils/secret';
+import { deletePassword } from '../utils/deletePassword';
+import { Document } from 'mongoose';
 
 const saltRounds = 12;
 
@@ -39,14 +41,10 @@ const register: RequestHandler<
       return res.status(400).json({ message: 'Such user already exists' });
     }
 
-    if (password.length < 8 || password.length > 16) {
-      return res.status(400).json({ message: 'Incorrect password' });
-    }
-
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const user = await User.create({ ...req.body, password: hashedPassword, role: 'user' });
+    const user: any = await User.create({ ...req.body, password: hashedPassword, role: 'admin' });
 
-    return res.status(201).json(user);
+    return res.status(201).json(deletePassword(user._doc));
   } catch (error) {
     res.status(500).json({ message: 'Some error has occured', error });
   }
@@ -67,7 +65,7 @@ const login: RequestHandler<
         message: 'Incorrect password or email',
       });
     }
-    const userData: any = await User.findOne({ email });
+    const userData = await User.findOne({ email });
 
     if (!userData) {
       res.status(400).json({ message: 'Such user doesn`t exist' });
@@ -79,7 +77,7 @@ const login: RequestHandler<
       return res.status(401).json({ message: 'Incorrect password or email' });
     } else {
       const token = jwt.sign({ email, password, _id: userData._id }, secretJWT, { expiresIn: '1h' });
-      res.json({ token, userData });
+      res.json({ token, userData: deletePassword(userData._doc) });
     }
   } catch (error) {
     res.status(500).send({ message: 'Some error has occured' });

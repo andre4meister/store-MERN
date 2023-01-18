@@ -13,7 +13,7 @@ const FormItem: FC<FormItemProps> = ({ isEditing, defaultValue, label, inputName
   return (
     <Form.Item className={styles.form__item} name={inputName} label={label}>
       {isEditing ? (
-        <Input className={styles.item__value} defaultValue={defaultValue} />
+        <Input className={styles.item__value} />
       ) : (
         <div className={styles.item__value}>{defaultValue || '-'}</div>
       )}

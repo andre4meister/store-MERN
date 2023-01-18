@@ -1,0 +1,31 @@
+ .containerForNavigation {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1280px;
+    padding: 0 20px;
+    overflow: auto;
+    list-style: none;
+ }
+
+ .itemNavigation {
+    margin-right: 16px;
+    display: inline-block;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 8px;
+    padding-right: 8px;
+    white-space: nowrap;
+
+    a {
+      color: #3e77aa;
+         cursor: pointer;
+         text-decoration: none;
+    }
+ }
+
+.itemNavigation__active {
+    box-shadow: inset 0 -2px 0 0 #1677ff;
+    color: #1677ff;
+}

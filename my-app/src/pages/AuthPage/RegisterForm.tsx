@@ -3,12 +3,14 @@ import { Button, Card, Checkbox, Form, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { useAppDispatch } from 'hooks/redux';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RegistrationFormType } from 'services/userAPI';
 import { fetchRegister } from 'store/user/user';
 import styles from './Auth.module.scss';
 
 const RegistrationForm = () => {
   const dispatch = useAppDispatch();
+  const navigateFromLogin = useNavigate();
   const formRef = React.createRef<FormInstance>();
   const [form] = Form.useForm();
 
@@ -20,7 +22,7 @@ const RegistrationForm = () => {
   };
 
   const onSubmit = (values: RegistrationFormType) => {
-    dispatch(fetchRegister(values));
+    dispatch(fetchRegister({ values, navigateFromLogin }));
   };
 
   return (

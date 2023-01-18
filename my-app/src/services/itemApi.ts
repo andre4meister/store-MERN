@@ -4,7 +4,7 @@ import axiosInstance from './axios';
 export class ItemApi {
   static async getItemById(id: string) {
     try {
-      const response = await axiosInstance.get<ItemType>(`users/${id}`);
+      const response = await axiosInstance.get<ItemType>(`items/${id}`);
       return response;
     } catch (e) {
       return e;

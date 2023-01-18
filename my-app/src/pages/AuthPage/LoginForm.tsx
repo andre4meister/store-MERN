@@ -22,7 +22,7 @@ const LoginForm = () => {
   };
 
   const navigateFromLogin = () => {
-    navigate('/');
+    navigate('/', { replace: true });
   };
 
   const onFinish = (values: LoginFormType) => {

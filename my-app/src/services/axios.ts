@@ -1,8 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { dispatchLoginFailure } from 'store/user/user';
-
-const tokenFromLocalStorage = localStorage.getItem('token');
-const token = tokenFromLocalStorage && (JSON.parse(tokenFromLocalStorage) as string);
+import getToken from 'utils/getToken';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:5000/',
@@ -11,6 +9,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
+    const token = getToken();
+
     if (config.headers) {
       if (token) config.headers.Authorization = `Bearer ${token}`;
       config.headers['Content-Type'] = 'application/json';

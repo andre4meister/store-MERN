@@ -37,7 +37,15 @@ const PersonalForm = () => {
 
   return (
     <div className={styles.container}>
-      <Form className={styles.form} form={form} ref={formRef} onFinish={onSave} name="personal-data" layout="vertical">
+      <Form
+        className={styles.form}
+        form={form}
+        ref={formRef}
+        onFinish={onSave}
+        name="personal-data"
+        layout="vertical"
+        initialValues={{ userName, firstName, lastName }}
+      >
         <FormItem isEditing={isEditing} defaultValue={userName} label="Nickname" inputName="userName" />
         <FormItem isEditing={isEditing} defaultValue={firstName} label="Firstname" inputName="firstName" />
         <FormItem isEditing={isEditing} defaultValue={lastName} label="Lastname" inputName="lastName" />

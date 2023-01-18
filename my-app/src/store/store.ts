@@ -1,14 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/user';
+import dashboardReducer from './dashboard/dashboard';
+import itemReducer from './item/item';
 
 const rootReducer = combineReducers({
   userReducer,
+  dashboardReducer,
+  itemReducer,
 });
 
 const store = configureStore({
-  reducer: {
-    userReducer,
-  },
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

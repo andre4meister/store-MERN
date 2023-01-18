@@ -43,13 +43,13 @@ const MainLayout: FC = () => {
           <Header className={styles.header}>
             <MyHeader setIsCollapsed={setIsCollapsed} />
           </Header>
-          {isLoading ? (
+          {/* {isLoading ? (
             <Loader />
-          ) : (
-            <Content className={styles.content}>
-              <Outlet />
-            </Content>
-          )}
+          ) : ( */}
+          <Content className={styles.content}>
+            <Outlet />
+          </Content>
+          {/* )} */}
         </Layout>
       </Layout>
     </>

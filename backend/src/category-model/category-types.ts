@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import { itemScheme, ItemType } from '../product-model/item-types';
 
 interface FiltersType {
   isAvailable: boolean;
@@ -8,25 +7,38 @@ interface FiltersType {
   brand: string;
   model: string;
 }
-interface SubCategoryType {
+interface CommonCategoryType {
   readonly _id: string;
   name: string;
   description: string;
   filters: FiltersType[];
 }
 
-interface CategoryType extends SubCategoryType {
+interface CategoryType extends CommonCategoryType {
   subCategories: SubCategoryType[];
+  icon: string;
 }
 
-const subCategoryScheme = new Schema<CategoryType>({
+interface SubCategoryType extends CommonCategoryType {
+  photo: string;
+}
+
+const subCategoryScheme = new Schema<SubCategoryType>({
   name: {
     type: String,
+    sparse: true,
+    required: true,
+    validate: { validator: (v: string) => v.length >= 2, message: 'Incorrect name, it should be longer' },
+  },
+  photo: {
+    type: String,
+    sparse: true,
     required: true,
     validate: { validator: (v: string) => v.length >= 2, message: 'Incorrect name, it should be longer' },
   },
   description: {
     type: String,
+    sparse: true,
     required: true,
     validate: { validator: (v: string) => v.length >= 10, message: 'Too short description' },
   },
@@ -36,19 +48,43 @@ const subCategoryScheme = new Schema<CategoryType>({
 const categoryScheme = new Schema<CategoryType>({
   name: {
     type: String,
+    unique: false,
     required: true,
     validate: { validator: (v: string) => v.length >= 2, message: 'Incorrect name, it should be longer' },
+    partialFilterExpression: { name: { $exists: true } },
+    sparse: true,
   },
   description: {
     type: String,
     required: true,
+    unique: true,
+    partialFilterExpression: { name: { $exists: true } },
+    sparse: true,
     validate: { validator: (v: string) => v.length >= 10, message: 'Too short description' },
   },
-  subCategories: [{ type: Schema.Types.ObjectId, ref: 'SubCategory' }],
+  icon: {
+    type: String,
+    required: true,
+    partialFilterExpression: { name: { $exists: true } },
+    sparse: true,
+  },
+  subCategories: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'subCategory',
+      required: true,
+      sparse: true,
+      partialFilterExpression: { name: { $exists: true } },
+    },
+  ],
   filters: [String],
 });
 
-const Category = mongoose.model('Category', categoryScheme);
-const SubCategory = mongoose.model('SubCategory', subCategoryScheme);
+const Category = mongoose.model('category', categoryScheme);
+const SubCategory = mongoose.model('subCategory', subCategoryScheme);
 
+try {
+} catch (error) {
+  console.log(error);
+}
 export { categoryScheme, subCategoryScheme, CategoryType, FiltersType, SubCategoryType, Category, SubCategory };

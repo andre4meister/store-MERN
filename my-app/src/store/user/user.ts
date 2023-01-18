@@ -23,6 +23,9 @@ interface LoginFormWithNavigate extends NavigateType {
   values: LoginFormType;
 }
 
+interface RegistrationFormWithNavigate extends NavigateType {
+  values: RegistrationFormType;
+}
 interface UserReducerStateType {
   isAuth: boolean;
   error: string;
@@ -84,22 +87,32 @@ export const fetchLogin = createAsyncThunk('user/login', async (args: LoginFormW
   }
 });
 
-export const fetchRegister = createAsyncThunk('user/registration', async (data: RegistrationFormType, thunkAPI) => {
-  try {
-    thunkAPI.dispatch(toggleIsLoading(true));
-    const response = (await UserAPI.register(data)) as AxiosResponse<UserType>;
-    if (response?.status === 201) {
-      thunkAPI.dispatch(fetchLogin({ values: { email: data.email, password: data.password } }));
-    } else {
-      // WIP read error
-      thunkAPI.dispatch(loginFailure('Incorrect values or user with this email/userName already exists'));
+export const fetchRegister = createAsyncThunk(
+  'user/registration',
+  async (args: RegistrationFormWithNavigate, thunkAPI) => {
+    try {
+      const { navigateFromLogin, values } = args;
+
+      thunkAPI.dispatch(toggleIsLoading(true));
+      const response = (await UserAPI.register(values)) as AxiosResponse<UserType>;
+      if (response?.status === 201) {
+        thunkAPI.dispatch(
+          fetchLogin({
+            values: { email: values.email, password: values.password },
+            navigateFromLogin: navigateFromLogin,
+          }),
+        );
+      } else {
+        // WIP read error
+        thunkAPI.dispatch(loginFailure('Incorrect values or user with this email/userName already exists'));
+      }
+      thunkAPI.dispatch(toggleIsLoading(false));
+    } catch (error) {
+      //  WIP alert here
+      thunkAPI.dispatch(loginFailure('Something is wrong Thunk'));
     }
-    thunkAPI.dispatch(toggleIsLoading(false));
-  } catch (error) {
-    //  WIP alert here
-    thunkAPI.dispatch(loginFailure('Something is wrong Thunk'));
-  }
-});
+  },
+);
 
 export const fetchUpdatePersonalInfo = createAsyncThunk<void, UpdateUserType>(
   'user/update-info',
@@ -107,7 +120,6 @@ export const fetchUpdatePersonalInfo = createAsyncThunk<void, UpdateUserType>(
     try {
       thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.updatePersonalInfo(data)) as AxiosResponse<UserType>;
-
       if (response?.status === 200) {
         // WIP alert thunkAPI.dispatch();
         thunkAPI.dispatch(login(response.data));
@@ -129,9 +141,9 @@ export const fetchUpdatePassword = createAsyncThunk<void, UpdateUserType>(
     try {
       thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.updatePassword(data)) as AxiosResponse<UserType>;
+
       if (response?.status === 200) {
         // WIP alert thunkAPI.dispatch();
-        console.log(response);
         thunkAPI.dispatch(login(response.data));
       } else {
         // WIP read error
@@ -152,6 +164,7 @@ export const fetchDeleteAccount = createAsyncThunk<void, WithIdType>('user/delet
     if (response?.status === 200) {
       // WIP alert thunkAPI.dispatch();
       thunkAPI.dispatch(logout());
+      window.location.reload();
     } else {
       // WIP read error
       thunkAPI.dispatch(loginFailure('Couldn`t delete your account, try again'));
@@ -177,13 +190,16 @@ export const dispatchLoginFailure = createAsyncThunk<void, string>(
 export const fetchGetProfile = createAsyncThunk<void, void>('user/get-profile', async (data, thunkAPI) => {
   try {
     thunkAPI.dispatch(toggleIsLoading(true));
-    const userData = JSON.parse(localStorage.getItem('userData') || '') as UserType;
-    const response = (await UserAPI.getUserById(userData._id)) as AxiosResponse<UserType>;
+    const stringifyUserData = localStorage.getItem('userData') || 'null';
+    const userData: UserType = JSON.parse(stringifyUserData);
 
-    if (response.status === 200) {
-      thunkAPI.dispatch(login(response.data));
-    } else {
-      thunkAPI.dispatch(loginFailure('expire token'));
+    if (userData) {
+      const response = (await UserAPI.getUserById(userData._id)) as AxiosResponse<UserType>;
+      if (response.status === 200) {
+        thunkAPI.dispatch(login(response.data));
+      } else {
+        thunkAPI.dispatch(loginFailure('expire token'));
+      }
     }
     thunkAPI.dispatch(toggleIsLoading(false));
   } catch (e) {

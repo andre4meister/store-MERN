@@ -2,8 +2,8 @@ export interface ItemType {
   readonly _id: string;
   name: string;
   description: string;
-  category: string;
-  subCategory: string;
+  category: any;
+  subCategory: any;
   price: number;
   photos: string[];
   isAvailable: boolean;
