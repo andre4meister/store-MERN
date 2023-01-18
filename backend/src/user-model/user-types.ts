@@ -1,13 +1,14 @@
 import { Schema } from 'mongoose';
+import { OrderType } from '../order-model/order-types';
 import { ItemType } from '../product-model/item-types';
 
-export enum ShipmentMethodType {
+enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',
   UkrPoshta = 'Ukr Poshta',
   Meest = 'Meest Express',
 }
 
-export enum RoleEnum {
+enum RoleEnum {
   user = 'user',
   admin = 'admin',
   moderator = 'moderator',
@@ -33,6 +34,7 @@ interface UserType {
   deliveryMethod: DeliverMethodType[];
   likedItems: ItemType[];
   basket: ItemType[];
+  orders: OrderType[];
 }
 
 interface UserMethods {
@@ -83,6 +85,15 @@ const userSchema = new Schema({
       partialFilterExpression: { name: { $exists: true } },
     },
   ],
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: 'order',
+      sparse: true,
+      partialFilterExpression: { name: { $exists: true } },
+    },
+  ],
 });
 
 userSchema.method('deletePassword', function deletePassword() {
@@ -91,4 +102,4 @@ userSchema.method('deletePassword', function deletePassword() {
   return obj;
 });
 
-export { userSchema, UserType, DeliverMethodType, UserMethods };
+export { userSchema, UserType, DeliverMethodType, UserMethods, RoleEnum, ShipmentMethodType, deliverySchema };

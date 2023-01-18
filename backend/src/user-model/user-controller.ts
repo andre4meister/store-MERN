@@ -1,7 +1,6 @@
 import { Handler, Response } from 'express';
 import mongoose, { Model } from 'mongoose';
 import bcrypt from 'bcrypt';
-// import { Query } from 'express-serve-static-core';
 
 import { UserMethods, userSchema, UserType } from './user-types';
 import { deletePassword } from '../utils/deletePassword';
