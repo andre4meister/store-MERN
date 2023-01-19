@@ -1,5 +1,6 @@
 import { UserType } from '../user-model/user-types';
 
+// WIP fix any type
 export const deletePassword = (users: any) => {
   if (users.password) {
     const userWithoutPassword: Partial<UserType> = { ...users };

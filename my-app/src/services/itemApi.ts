@@ -10,6 +10,7 @@ export class ItemApi {
       return e;
     }
   }
+  // WIP fix any type
 
   static async getItems(filters: any) {
     // WIP make util for formating filters to ?key=value&  keyform

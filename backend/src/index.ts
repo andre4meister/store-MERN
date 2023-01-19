@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import { itemRouter } from './product-model/item-router';
 import { subCategoryRouter } from './subCategoty-model/subCategory-router';
 import { categoryRouter } from './category-model/category-router';
+import { orderRouter } from './order-model/order-router';
+import validationMiddleware from './middleWare/validationMiddleware';
 
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
@@ -19,7 +21,8 @@ app
   .use('/auth', authRouter)
   .use('/category', categoryRouter)
   .use('/subCategory', subCategoryRouter)
-  .use('/items', itemRouter);
+  .use('/items', itemRouter)
+  .use('/orders', orderRouter);
 
 const start = async () => {
   try {

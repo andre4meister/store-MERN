@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
 import { User } from '../user-model/user-controller';
 import bcrypt from 'bcrypt';
-import { UserType } from '../user-model/user-types';
+import { UserMethods, userSchema, UserType } from '../user-model/user-types';
 import { ValidationError, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import secretJWT from '../utils/secret';
 import { deletePassword } from '../utils/deletePassword';
-import { Document } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 
 const saltRounds = 12;
 
@@ -42,6 +42,7 @@ const register: RequestHandler<
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // WIP fix any type  Document<Types.ObjectId, any, Model<UserType, any, UserMethods, any, typeof userSchema>>
     const user: any = await User.create({ ...req.body, password: hashedPassword, role: 'admin' });
 
     return res.status(201).json(deletePassword(user._doc));
