@@ -3,7 +3,7 @@ import { Button, Modal, Form, Checkbox } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import React from 'react';
-import { fetchDeleteAccount } from 'store/user/user';
+import { fetchDeleteAccount } from 'store/user/user-thunks';
 import styles from './SettingsForm.module.scss';
 
 const { confirm } = Modal;

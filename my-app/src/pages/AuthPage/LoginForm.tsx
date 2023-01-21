@@ -5,7 +5,7 @@ import { useAppDispatch } from 'hooks/redux';
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LoginFormType } from 'services/userAPI';
-import { fetchLogin } from 'store/user/user';
+import { fetchLogin } from 'store/user/user-thunks';
 import styles from './Auth.module.scss';
 
 const LoginForm = () => {

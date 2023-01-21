@@ -9,9 +9,14 @@ const rootReducer = combineReducers({
   itemReducer,
 });
 
-const store = configureStore({
-  reducer: rootReducer,
-});
+export const createReduxStore = (initialState: RootState = {} as RootState) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState: initialState,
+  });
+};
+
+const store = createReduxStore();
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStateType = ReturnType<typeof store.getState>;

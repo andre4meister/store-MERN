@@ -5,7 +5,7 @@ import { useAppDispatch } from 'hooks/redux';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegistrationFormType } from 'services/userAPI';
-import { fetchRegister } from 'store/user/user';
+import { fetchRegister } from 'store/user/user-thunks';
 import styles from './Auth.module.scss';
 
 const RegistrationForm = () => {
