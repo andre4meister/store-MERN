@@ -7,7 +7,7 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import { Layout, Alert } from 'antd';
 import MyHeader from 'components/Header/Header';
 import { UserAPI } from 'services/userAPI';
-import { fetchGetProfile } from 'store/user/user';
+import { fetchGetProfile } from 'store/user/user-thunks';
 import Loader from 'components/Loader/Loader';
 
 const { Header, Sider, Content } = Layout;
@@ -25,7 +25,7 @@ const MainLayout: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (error === 'expire token') {
+    if (error === 'expire token' || error === 'Invalid token') {
       UserAPI.logout();
       if (location.pathname.includes('settings')) {
         navigate('/login', { replace: true });

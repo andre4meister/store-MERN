@@ -41,9 +41,7 @@ const createOrder: Handler = async (req, res: Response) => {
     const { userId, ...body } = req.body;
     const order = await Order.create({ ...req.body, orderStatus: OrderStatus.created });
 
-    const user = User.findById(userId);
-    user.orders = [...user.orders, order._id];
-    user.save();
+    await User.findByIdAndUpdate(userId, { $push: { orders: order._id } });
 
     res.status(201).json(order);
   } catch (error) {

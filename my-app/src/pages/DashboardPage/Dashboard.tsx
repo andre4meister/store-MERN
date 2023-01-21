@@ -6,11 +6,12 @@ import { settingsMenuItems } from '../../components/SettingsMenu/SettingsMenu';
 import { logout } from 'store/user/user';
 import cn from 'classnames';
 import { useEffect } from 'react';
-import { fetchAllItems, fetchCategories } from 'store/dashboard/dashboard';
+import { fetchAllItems, fetchCategories } from 'store/dashboard/dashboard-thunks';
 import { LogoutOutlined } from '@ant-design/icons';
 import DashboardNav from 'components/DashoboardNav/DashboardNav';
 import ItemsList from 'components/ItemsList/ItemsList';
 import { ItemType } from 'store/item/item-types';
+import { dispatchLogout } from 'store/user/user-thunks';
 
 // const listmock: ItemType[] = [
 //   {
@@ -187,7 +188,7 @@ const Dashboard = () => {
                 to="user-info"
                 className={({ isActive }) => cn(styles.profileNavigation, isActive && styles.activeProfileNavigation)}
               >
-                <div className={styles.userMenuItem__icon}>{firstName.charAt(0)}</div>
+                <div className={styles.userMenuItem__icon}>{firstName ? firstName.charAt(0) : ''}</div>
                 <div className={styles.userMenuItem__name}>
                   <div className={styles.name__name}>{userName}</div>
                   <div className={styles.name__email}>{email}</div>
@@ -217,7 +218,7 @@ const Dashboard = () => {
           })}
         </ul>
         <Row justify="center" align="bottom">
-          <Button className={styles.logout} size="large" type="primary" onClick={() => dispatch(logout())}>
+          <Button className={styles.logout} size="large" type="primary" onClick={() => dispatch(dispatchLogout())}>
             <LogoutOutlined />
             <span>Log out</span>
           </Button>

@@ -4,9 +4,9 @@ import { NavLink, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import type { DotPosition } from 'antd/es/carousel';
 import { Breadcrumb } from 'antd';
-import { fetchAllItems } from 'store/dashboard/dashboard';
+import { fetchAllItems } from 'store/dashboard/dashboard-thunks';
 import styles from './ItemPage.module.scss';
-import { fetchItemById } from 'store/item/item';
+import { fetchItemById } from 'store/item/item-thunks';
 import classNames from 'classnames';
 import ItemPageNav from 'components/ItemPageNav/ItemPageNav';
 import { RightOutlined } from '@ant-design/icons';
@@ -16,153 +16,153 @@ import Slider from 'components/Slider/Slider';
 
 const ItemsList = React.lazy(() => import('../../components/ItemsList/ItemsList'));
 
-const listmock: ItemType[] = [
-  {
-    _id: '63bc3ba31a08d4116934c87d',
-    name: 'Apple Iphone 13 128gb',
-    description: 'Not bad modern phone for all people',
-    category: [],
-    subCategory: [
-      {
-        _id: '63bc382660bbb2f1fdb74767',
-        name: 'Mobiles',
-        description: 'Mobile and other phones',
-        filters: [],
-      },
-    ],
-    price: 1200,
-    isAvailable: true,
-    photos: [
-      'https://content1.rozetka.com.ua/goods/images/big/221214139.jpg',
-      'https://jabko.ua/image/cache/catalog/products/2022/09/081514/iphone-14-pro-finish-select-2022%20(8)-1397x1397.jpg.webp',
-      'https://touch.com.ua/upload/iblock/t9g/t9gtqvrcaiboxna2l022lms60huh0hty.png',
-    ],
-    brand: 'Apple',
-    model: 'Iphone 13',
-  },
-  {
-    _id: '63bc3bce1a08d4116934c885',
-    name: 'Apple Iphone 14 128gb',
-    description: 'Not bad modern phone for people',
-    category: [],
-    subCategory: [
-      {
-        _id: '63bc382660bbb2f1fdb74767',
-        name: 'Mobiles',
-        description: 'Mobile and other phones',
-        filters: [],
-      },
-    ],
-    price: 1200,
-    isAvailable: true,
-    photos: [
-      'https://content1.rozetka.com.ua/goods/images/big/221214139.jpg',
-      'https://jabko.ua/image/cache/catalog/products/2022/09/081514/iphone-14-pro-finish-select-2022%20(8)-1397x1397.jpg.webp',
-      'https://touch.com.ua/upload/iblock/t9g/t9gtqvrcaiboxna2l022lms60huh0hty.png',
-    ],
-    brand: 'Apple',
-    model: 'Iphone 14',
-  },
-  {
-    _id: '63bc3c511a08d4116934c890',
-    name: 'Google Pixel 6 Pro 128gb',
-    description: 'Best 2021 year modern phone',
-    category: [],
-    subCategory: [
-      {
-        _id: '63bc382660bbb2f1fdb74767',
-        name: 'Mobiles',
-        description: 'Mobile and other phones',
-        filters: [],
-      },
-    ],
-    price: 600,
-    isAvailable: false,
-    photos: ['https://content1.rozetka.com.ua/goods/images/big/221214139.jpg'],
-    brand: 'Google',
-    model: 'Pixel 6 Pro',
-  },
-  {
-    _id: '63bc4dd59a5f10608ba8007d',
-    name: 'Vansiton Extra Protein 1,4 kg',
-    description: 'Vansiton Extra Protein 1,4 kg',
-    category: [
-      {
-        _id: '63bc38c6f7c667e7fadb7a13',
-        name: 'Sport',
-        description: 'Things for sport',
-        subCategories: ['63bc382660bbb2f1fdb74767'],
-        filters: [],
-        icon: 'https://uxwing.com/wp-content/themes/uxwing/download/sport-and-awards/tennis-icon.svg',
-      },
-    ],
-    subCategory: [
-      {
-        _id: '63bc4af202ee5b42ad59cf4a',
-        name: 'Vitamins',
-        description: 'Vital vitamins, proteins and other goods for health',
-        filters: [],
-      },
-    ],
-    price: 37,
-    isAvailable: true,
-    photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
-    brand: 'Vansiton',
-    model: 'Extra pro',
-  },
-  {
-    _id: '63bc4e109a5f10608ba80081',
-    name: 'Olympics Sport Protein 1,4 kg',
-    description: 'Olympics Sport Protein 1,4 kg',
-    category: [
-      {
-        _id: '63bc38c6f7c667e7fadb7a13',
-        name: 'Sport',
-        description: 'Things for sport',
-        subCategories: ['63bc382660bbb2f1fdb74767'],
-        filters: [],
-        icon: 'https://uxwing.com/wp-content/themes/uxwing/download/sport-and-awards/tennis-icon.svg',
-      },
-    ],
-    subCategory: [
-      {
-        _id: '63bc4af202ee5b42ad59cf4a',
-        name: 'Vitamins',
-        description: 'Vital vitamins, proteins and other goods for health',
-        filters: [],
-      },
-    ],
-    price: 37,
-    isAvailable: true,
-    photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
-    brand: 'Olympics Sport',
-    model: 'Hundred version',
-  },
-  {
-    _id: '63bc4e2f9a5f10608ba80085',
-    name: 'Olympics Sport Protein 1 kg',
-    description: 'Olympics Sport Protein 1 kg',
-    category: null,
-    subCategory: null,
-    price: 37,
-    isAvailable: true,
-    photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
-    brand: 'Olympics Sport',
-    model: 'Hundred version',
-  },
-  {
-    _id: '63bc4e3f9a5f10608ba80089',
-    name: 'Olympics Sport Protein 4 kg',
-    description: 'Olympics Sport Protein 4 kg',
-    category: null,
-    subCategory: null,
-    price: 37,
-    isAvailable: true,
-    photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
-    brand: 'Olympics Sport',
-    model: 'Hundred version',
-  },
-];
+// const listmock: ItemType[] = [
+//   {
+//     _id: '63bc3ba31a08d4116934c87d',
+//     name: 'Apple Iphone 13 128gb',
+//     description: 'Not bad modern phone for all people',
+//     category: [],
+//     subCategory: [
+//       {
+//         _id: '63bc382660bbb2f1fdb74767',
+//         name: 'Mobiles',
+//         description: 'Mobile and other phones',
+//         filters: [],
+//       },
+//     ],
+//     price: 1200,
+//     isAvailable: true,
+//     photos: [
+//       'https://content1.rozetka.com.ua/goods/images/big/221214139.jpg',
+//       'https://jabko.ua/image/cache/catalog/products/2022/09/081514/iphone-14-pro-finish-select-2022%20(8)-1397x1397.jpg.webp',
+//       'https://touch.com.ua/upload/iblock/t9g/t9gtqvrcaiboxna2l022lms60huh0hty.png',
+//     ],
+//     brand: 'Apple',
+//     model: 'Iphone 13',
+//   },
+//   {
+//     _id: '63bc3bce1a08d4116934c885',
+//     name: 'Apple Iphone 14 128gb',
+//     description: 'Not bad modern phone for people',
+//     category: [],
+//     subCategory: [
+//       {
+//         _id: '63bc382660bbb2f1fdb74767',
+//         name: 'Mobiles',
+//         description: 'Mobile and other phones',
+//         filters: [],
+//       },
+//     ],
+//     price: 1200,
+//     isAvailable: true,
+//     photos: [
+//       'https://content1.rozetka.com.ua/goods/images/big/221214139.jpg',
+//       'https://jabko.ua/image/cache/catalog/products/2022/09/081514/iphone-14-pro-finish-select-2022%20(8)-1397x1397.jpg.webp',
+//       'https://touch.com.ua/upload/iblock/t9g/t9gtqvrcaiboxna2l022lms60huh0hty.png',
+//     ],
+//     brand: 'Apple',
+//     model: 'Iphone 14',
+//   },
+//   {
+//     _id: '63bc3c511a08d4116934c890',
+//     name: 'Google Pixel 6 Pro 128gb',
+//     description: 'Best 2021 year modern phone',
+//     category: [],
+//     subCategory: [
+//       {
+//         _id: '63bc382660bbb2f1fdb74767',
+//         name: 'Mobiles',
+//         description: 'Mobile and other phones',
+//         filters: [],
+//       },
+//     ],
+//     price: 600,
+//     isAvailable: false,
+//     photos: ['https://content1.rozetka.com.ua/goods/images/big/221214139.jpg'],
+//     brand: 'Google',
+//     model: 'Pixel 6 Pro',
+//   },
+//   {
+//     _id: '63bc4dd59a5f10608ba8007d',
+//     name: 'Vansiton Extra Protein 1,4 kg',
+//     description: 'Vansiton Extra Protein 1,4 kg',
+//     category: [
+//       {
+//         _id: '63bc38c6f7c667e7fadb7a13',
+//         name: 'Sport',
+//         description: 'Things for sport',
+//         subCategories: ['63bc382660bbb2f1fdb74767'],
+//         filters: [],
+//         icon: 'https://uxwing.com/wp-content/themes/uxwing/download/sport-and-awards/tennis-icon.svg',
+//       },
+//     ],
+//     subCategory: [
+//       {
+//         _id: '63bc4af202ee5b42ad59cf4a',
+//         name: 'Vitamins',
+//         description: 'Vital vitamins, proteins and other goods for health',
+//         filters: [],
+//       },
+//     ],
+//     price: 37,
+//     isAvailable: true,
+//     photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
+//     brand: 'Vansiton',
+//     model: 'Extra pro',
+//   },
+//   {
+//     _id: '63bc4e109a5f10608ba80081',
+//     name: 'Olympics Sport Protein 1,4 kg',
+//     description: 'Olympics Sport Protein 1,4 kg',
+//     category: [
+//       {
+//         _id: '63bc38c6f7c667e7fadb7a13',
+//         name: 'Sport',
+//         description: 'Things for sport',
+//         subCategories: ['63bc382660bbb2f1fdb74767'],
+//         filters: [],
+//         icon: 'https://uxwing.com/wp-content/themes/uxwing/download/sport-and-awards/tennis-icon.svg',
+//       },
+//     ],
+//     subCategory: [
+//       {
+//         _id: '63bc4af202ee5b42ad59cf4a',
+//         name: 'Vitamins',
+//         description: 'Vital vitamins, proteins and other goods for health',
+//         filters: [],
+//       },
+//     ],
+//     price: 37,
+//     isAvailable: true,
+//     photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
+//     brand: 'Olympics Sport',
+//     model: 'Hundred version',
+//   },
+//   {
+//     _id: '63bc4e2f9a5f10608ba80085',
+//     name: 'Olympics Sport Protein 1 kg',
+//     description: 'Olympics Sport Protein 1 kg',
+//     category: null,
+//     subCategory: null,
+//     price: 37,
+//     isAvailable: true,
+//     photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
+//     brand: 'Olympics Sport',
+//     model: 'Hundred version',
+//   },
+//   {
+//     _id: '63bc4e3f9a5f10608ba80089',
+//     name: 'Olympics Sport Protein 4 kg',
+//     description: 'Olympics Sport Protein 4 kg',
+//     category: null,
+//     subCategory: null,
+//     price: 37,
+//     isAvailable: true,
+//     photos: ['https://content1.rozetka.com.ua/goods/images/big/292727352.jpg'],
+//     brand: 'Olympics Sport',
+//     model: 'Hundred version',
+//   },
+// ];
 
 const ItemPage = () => {
   const { id } = useParams();
@@ -180,6 +180,10 @@ const ItemPage = () => {
   const handlePositionChange = ({ target: { value } }: RadioChangeEvent) => {
     setDotPosition(value);
   };
+
+  useEffect(() => {
+    dispatch(fetchAllItems());
+  }, []);
 
   useEffect(() => {
     if (!itemInfo._id || id !== itemInfo._id) dispatch(fetchItemById({ id: id || '' }));
@@ -213,7 +217,7 @@ const ItemPage = () => {
       </div>
       <div className={styles.recommendations}>
         <Suspense fallback={<h1>loading...</h1>}>
-          <ItemsList title="Recommendations" key="recommendations" items={listmock} oneLine />
+          <ItemsList title="Recommendations" key="recommendations" items={likedItems} oneLine />
         </Suspense>
       </div>
       <div className={styles.generalCharacteristics}>characteristics</div>

@@ -2,7 +2,7 @@ import { Form } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import React, { useState } from 'react';
-import { fetchUpdatePersonalInfo } from 'store/user/user';
+import { fetchUpdatePersonalInfo } from 'store/user/user-thunks';
 import ButtonForForms from './ButtonsForForms';
 import FormItem from './FormItem';
 import styles from './SettingsForm.module.scss';
@@ -31,7 +31,6 @@ const PersonalForm = () => {
 
   const onSave = (values: PersonalDataType) => {
     dispatch(fetchUpdatePersonalInfo({ ...values, _id }));
-    console.log(values);
     switchIsEditing();
   };
 

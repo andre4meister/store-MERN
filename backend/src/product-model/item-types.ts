@@ -1,5 +1,4 @@
 import { Schema } from 'mongoose';
-import { categoryScheme, subCategoryScheme } from '../category-model/category-types';
 
 interface ItemType {
   readonly _id: string;
@@ -22,14 +21,12 @@ const itemScheme = new Schema<ItemType>({
     unique: true,
     partialFilterExpression: { name: { $exists: true } },
     sparse: true,
-    validate: { validator: (v: string) => v.length >= 2, message: 'Incorrect name, it should be longer' },
   },
   description: {
     type: String,
     required: true,
     unique: true,
     partialFilterExpression: { name: { $exists: true } },
-    validate: { validator: (v: string) => v.length >= 10, message: 'Too short description' },
   },
   category: [
     {
@@ -51,7 +48,7 @@ const itemScheme = new Schema<ItemType>({
   ],
   price: { type: Number, required: true, validate: { validator: (v: number) => v > 0, message: 'Incorrect price' } },
   isAvailable: { type: Boolean, required: true },
-  discountPrice: { type: Number, validate: { validator: (v: number) => v > 0, message: 'Incorrect price' } },
+  discountPrice: { type: Number },
   photos: [String],
   brand: { type: String },
   model: { type: String },

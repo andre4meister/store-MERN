@@ -19,7 +19,6 @@ type UserIdType = {
   required: true;
   sparse: true;
   partialFilterExpression: { name: { $exists: true } };
-  validate: { validator: (v: string) => boolean; message: string };
 };
 
 interface OrderType {

@@ -25,7 +25,7 @@ const Slider: React.FC<SliderProps> = ({ photos }) => {
       >
         {photos.map((photo) => {
           return (
-            <div className={styles.photoContainer}>
+            <div className={styles.photoContainer} key={photo}>
               <img src={photo} alt="item-photo" />
             </div>
           );

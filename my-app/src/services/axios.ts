@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { dispatchLoginFailure } from 'store/user/user';
+import { dispatchLoginFailure } from 'store/user/user-thunks';
 import getToken from 'utils/getToken';
 
 const axiosInstance = axios.create({
@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError<{ message: string; error: string }>) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
-      dispatchLoginFailure(error.response?.data.error);
+      dispatchLoginFailure(error.response?.data.message);
     }
     const response = error.response;
     return response;

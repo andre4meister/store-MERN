@@ -5,6 +5,7 @@ import secretJWT from '../utils/secret';
 export default function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.method === 'OPTIONS') {
     next();
+    return;
   }
 
   try {
@@ -18,6 +19,6 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
     next();
   } catch (error) {
     console.log(error);
-    res.status(403).json({ message: 'Invalid token', error });
+    return res.status(403).json({ message: 'expire token', error });
   }
 }

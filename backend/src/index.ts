@@ -8,6 +8,15 @@ import { subCategoryRouter } from './subCategoty-model/subCategory-router';
 import { categoryRouter } from './category-model/category-router';
 import { orderRouter } from './order-model/order-router';
 import validationMiddleware from './middleWare/validationMiddleware';
+import { oneOf } from 'express-validator';
+import {
+  createCategoryValidation,
+  createItemValidation,
+  createOrderValidation,
+  createSubCategoryValidation,
+  loginValidation,
+  registerValidation,
+} from './utils/validationChecks';
 
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
@@ -16,13 +25,14 @@ const app = express();
 
 app
   .use(json())
+  .use(validationMiddleware)
   .use(cors({ origin: '*' }))
   .use('/users', userRouter)
-  .use('/auth', authRouter)
-  .use('/category', categoryRouter)
-  .use('/subCategory', subCategoryRouter)
-  .use('/items', itemRouter)
-  .use('/orders', orderRouter);
+  .use('/auth', oneOf([registerValidation, loginValidation]), authRouter)
+  .use('/category', oneOf([createCategoryValidation]), categoryRouter)
+  .use('/subCategory', oneOf([createSubCategoryValidation]), subCategoryRouter)
+  .use('/items', oneOf([createItemValidation]), itemRouter)
+  .use('/orders', oneOf([createOrderValidation]), orderRouter);
 
 const start = async () => {
   try {

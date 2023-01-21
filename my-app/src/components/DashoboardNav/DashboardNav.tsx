@@ -7,10 +7,10 @@ import styles from './DashboardNav.module.scss';
 export const DashboardNavItem: FC<CategoryType> = ({ name, icon, _id, ...props }) => {
   const linkFromName: string = name.toLocaleLowerCase().replaceAll(' ', '-');
   return (
-    <li className={styles.dashboardNavItem}>
-      <NavLink to={linkFromName}>
+    <li className={styles.dashboardNavItem} data-="dashbordNavItemLi">
+      <NavLink to={linkFromName} data-testid="navlink">
         <img src={icon} alt={name} />
-        <p>{name}</p>
+        <p data-testid="name">{name}</p>
       </NavLink>
     </li>
   );
@@ -24,7 +24,7 @@ const DashboardNav = () => {
   }
 
   return (
-    <ul className={styles.categoriesMenu}>
+    <ul className={styles.categoriesMenu} data-testid="dashbordNavItemUl">
       {categories.map((category) => (
         <DashboardNavItem {...category} key={category._id} />
       ))}

@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 export default function validationMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.method === 'OPTIONS') {
     next();
+    return;
   }
 
   try {
