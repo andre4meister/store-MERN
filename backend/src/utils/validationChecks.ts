@@ -53,6 +53,7 @@ const createSubCategoryValidation = [
   check('name', 'Incorrect item name').isString().isLength({ min: 3, max: 100 }),
   check('description', 'Incorrect description').isString().exists(),
   check('photo', 'Incorrect photo').isString().exists(),
+
 ];
 
 const allValidationChecks = [

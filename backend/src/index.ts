@@ -18,6 +18,7 @@ import {
   registerValidation,
 } from './utils/validationChecks';
 
+
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5000;
@@ -33,6 +34,7 @@ app
   .use('/subCategory', oneOf([createSubCategoryValidation]), subCategoryRouter)
   .use('/items', oneOf([createItemValidation]), itemRouter)
   .use('/orders', oneOf([createOrderValidation]), orderRouter);
+
 
 const start = async () => {
   try {
