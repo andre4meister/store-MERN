@@ -5,13 +5,13 @@ export interface ItemInitialState {
   itemInfo: ItemType;
 }
 
-const initialState: ItemInitialState = {
+export const initialItemState: ItemInitialState = {
   itemInfo: {} as ItemType,
 };
 
 const itemReducer = createSlice({
   name: 'item',
-  initialState,
+  initialState: initialItemState,
   reducers: {
     setItemData(state, action: PayloadAction<ItemType>) {
       state.itemInfo = action.payload;

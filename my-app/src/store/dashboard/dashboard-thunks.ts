@@ -3,8 +3,8 @@ import { ItemType } from '../item/item-types';
 import { AxiosResponse } from 'axios';
 import { DashboardApi } from 'services/dashboardAPI';
 import { CategoryType, SubCategoryType } from 'store/category/category-types';
-import { toggleIsLoading } from 'store/user/user';
-import { setCategories, setError, setSubCategories, setLikedItems } from './dashboard';
+import { setError, toggleIsLoading } from 'store/app/app';
+import { setCategories, setSubCategories, setLikedItems } from './dashboard';
 
 export const fetchCategories = createAsyncThunk<void, { id?: string }>('dashboard/category', async (data, thunkAPI) => {
   try {

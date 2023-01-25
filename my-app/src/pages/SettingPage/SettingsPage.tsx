@@ -13,8 +13,8 @@ const SettingsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isAuth, userData, isLoading } = useAppSelector((state) => state.userReducer);
-  const { email, userName, role, phone, deliveryMethod, orders } = userData;
+  const { isAuth, userData } = useAppSelector((state) => state.userReducer);
+  const { email, userName } = userData;
 
   useEffect(() => {
     if (location.pathname === '/settings') {
@@ -27,7 +27,7 @@ const SettingsPage = () => {
   }
 
   return (
-    <Row className={styles.container}>
+    <Row className={styles.container} data-testid="settings-container">
       <Col span={5} push={0} className={styles.menu}>
         <div className={styles.avatar}>
           <li className={styles.menuItem}>
@@ -39,8 +39,12 @@ const SettingsPage = () => {
                 <UserOutlined />
               </div>
               <div className={styles.menuItem__name}>
-                <div className={styles.name__name}>{userName}</div>
-                <div className={styles.name__email}>{email}</div>
+                <div className={styles.name__name} data-testid="auth-userName">
+                  {userName}
+                </div>
+                <div className={styles.name__email} data-testid="auth-email">
+                  {email}
+                </div>
               </div>
             </NavLink>
           </li>
