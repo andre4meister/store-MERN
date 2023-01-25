@@ -5,14 +5,14 @@ interface AppInitialType {
   appError: string;
 }
 
-export const appInitialState: AppInitialType = {
+export const initialAppState: AppInitialType = {
   isLoading: false,
   appError: '',
 };
 
 const appReducer = createSlice({
   name: 'app',
-  initialState: appInitialState,
+  initialState: initialAppState,
   reducers: {
     toggleIsLoading(state, action: PayloadAction<boolean>) {
       if (typeof action.payload !== 'boolean') {

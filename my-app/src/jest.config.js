@@ -12,5 +12,10 @@ module.exports = {
     "json",
     "node"
   ],
-  testEnvironment: "node"
+  testEnvironment: "node",
+  setupFiles: ['./jestGlobalMocks.ts'],
+  setupFilesAfterEnv: ['./jestGlobalMocks.ts']
+
+
+
 }

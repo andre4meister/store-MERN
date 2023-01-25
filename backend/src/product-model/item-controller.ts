@@ -1,12 +1,20 @@
 import { Handler, Response } from 'express';
 import mongoose from 'mongoose';
 import { Category, SubCategory } from '../category-model/category-types';
+import { createFilterForItems } from '../utils/filters/createFilterForItems';
 import { itemScheme } from './item-types';
 
 const Item = mongoose.model('item', itemScheme);
 
 const getAllItems: Handler = async (req, res: Response) => {
   try {
+    if (req.query) {
+      const items = await Item.find(createFilterForItems(req.query))
+        .populate(['category', 'subCategory'])
+        .collation({ locale: 'en', strength: 2 });
+      return res.status(200).json(items);
+    }
+
     const items = await Item.find().populate(['category', 'subCategory']);
     if (!items) {
       return res.status(400).json({ message: 'Some error' });

@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
-import { DashboardApi } from 'services/dashboardAPI';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CategoryType, SubCategoryType } from 'store/category/category-types';
 import { ItemType } from 'store/item/item-types';
 
@@ -10,7 +8,7 @@ interface DashboardInitialType {
   likedItems: ItemType[];
 }
 
-export const initialState: DashboardInitialType = {
+export const initialDashboardState: DashboardInitialType = {
   categories: [] as CategoryType[],
   subCategories: [] as SubCategoryType[],
   likedItems: [] as ItemType[],
@@ -18,7 +16,7 @@ export const initialState: DashboardInitialType = {
 
 const dashboardReducer = createSlice({
   name: 'dashboard',
-  initialState,
+  initialState: initialDashboardState,
   reducers: {
     setCategories(state, action: PayloadAction<CategoryType[]>) {
       state.categories = action.payload;

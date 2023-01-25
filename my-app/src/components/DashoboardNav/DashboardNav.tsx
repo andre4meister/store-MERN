@@ -7,7 +7,7 @@ import styles from './DashboardNav.module.scss';
 export const DashboardNavItem: FC<CategoryType> = ({ name, icon, _id, ...props }) => {
   const linkFromName: string = name.toLocaleLowerCase().replaceAll(' ', '-');
   return (
-    <li className={styles.dashboardNavItem} data-="dashbordNavItemLi">
+    <li className={styles.dashboardNavItem} data-testid="dashbordNavItemLi">
       <NavLink to={linkFromName} data-testid="navlink">
         <img src={icon} alt={name} />
         <p data-testid="name">{name}</p>

@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-// import AuthService from 'services/authService';
 import styles from './Layout.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -13,7 +12,7 @@ import Loader from 'components/Loader/Loader';
 const { Header, Sider, Content } = Layout;
 
 const MainLayout: FC = () => {
-  const { error, isLoading } = useAppSelector((state) => state.userReducer);
+  const { loginError } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -25,13 +24,13 @@ const MainLayout: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (error === 'expire token' || error === 'Invalid token') {
+    if (loginError === 'expire token' || loginError === 'Invalid token') {
       UserAPI.logout();
       if (location.pathname.includes('settings')) {
         navigate('/login', { replace: true });
       }
     }
-  }, [error, location]);
+  }, [loginError, location]);
 
   return (
     <>

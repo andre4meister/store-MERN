@@ -1,4 +1,4 @@
-import app, { appInitialState } from './app';
+import app, { initialAppState } from './app';
 
 describe('app reducer should work correctly', () => {
   it('should handle toggleIsLoading', () => {
@@ -11,6 +11,6 @@ describe('app reducer should work correctly', () => {
   });
 
   it('should fail if toggleIsLoading is called with non-boolean payload', () => {
-    expect(() => app(appInitialState, { type: 'app/toggleIsLoading', payload: 'not a boolean' })).toThrowError();
+    expect(() => app(initialAppState, { type: 'app/toggleIsLoading', payload: 'not a boolean' })).toThrowError();
   });
 });

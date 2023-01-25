@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { ItemApi } from 'services/itemApi';
-import { setError } from 'store/dashboard/dashboard';
-import { toggleIsLoading } from 'store/user/user';
+import { setError, toggleIsLoading } from 'store/app/app';
 import { setItemData } from './item';
 import { ItemType } from './item-types';
 

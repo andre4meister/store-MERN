@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { UserAPI } from 'services/userAPI';
+import { toggleIsLoading } from 'store/app/app';
 import { WithToken } from 'store/commonTypes';
 import {
-  toggleIsLoading,
   UserReducerStateType,
   login,
   logout,

@@ -1,20 +1,14 @@
 import { render } from '@testing-library/react';
-import App from 'App';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createReduxStore, RootState } from 'store/store';
 
-interface RenderWithRouterType {
+interface RenderWithReduxType {
   component: React.ReactNode;
-  initialState: RootState;
+  initialState?: RootState;
 }
-export const renderWithRedux = ({ component, initialState = {} as RootState }: RenderWithRouterType) => {
+export const renderWithRedux = ({ component, initialState = {} as RootState }: RenderWithReduxType) => {
   const store = createReduxStore(initialState);
 
-  return render(
-    <Provider store={store}>
-      <App />
-      {component}
-    </Provider>,
-  );
+  return render(<Provider store={store}>{component}</Provider>);
 };

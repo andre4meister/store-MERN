@@ -30,7 +30,7 @@ export interface UserReducerStateType {
   userData: UserType;
 }
 
-const initialState: Omit<UserReducerStateType, 'password'> = {
+export const initialUserState: Omit<UserReducerStateType, 'password'> = {
   userData: {} as UserType,
   loginError: '',
   isAuth: false,
@@ -38,7 +38,7 @@ const initialState: Omit<UserReducerStateType, 'password'> = {
 
 const userReducer = createSlice({
   name: 'user',
-  initialState,
+  initialState: initialUserState,
   reducers: {
     login(state, action: PayloadAction<UserType>) {
       state.userData = action.payload;
