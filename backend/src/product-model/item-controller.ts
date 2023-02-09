@@ -2,6 +2,7 @@ import { Handler, Response } from 'express';
 import mongoose from 'mongoose';
 import { Category, SubCategory } from '../category-model/category-types';
 import { createFilterForItems } from '../utils/filters/createFilterForItems';
+import createSortOptions from '../utils/filters/createSortOptions';
 import { itemScheme } from './item-types';
 
 const Item = mongoose.model('item', itemScheme);
@@ -9,7 +10,12 @@ const Item = mongoose.model('item', itemScheme);
 const getAllItems: Handler = async (req, res: Response) => {
   try {
     if (req.query) {
+      const sort = req.query.sort as string;
+      const limit = req.query.sort;
+      console.log('category:' + req.query.category);
       const items = await Item.find(createFilterForItems(req.query))
+        .limit(Number(limit) || 30)
+        .sort(createSortOptions(sort))
         .populate(['category', 'subCategory'])
         .collation({ locale: 'en', strength: 2 });
       return res.status(200).json(items);

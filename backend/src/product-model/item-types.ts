@@ -9,7 +9,11 @@ interface ItemType {
   price: number;
   photos: string[];
   isAvailable: boolean;
+  // WIP add review logic
+  // reviews: ReviewType[];
   discountPrice?: number;
+  // WIP type ObjectWithStringValues
+  characteristics?: { [key: string]: string | number };
   brand?: string;
   model?: string;
 }

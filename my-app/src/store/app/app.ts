@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface AppInitialType {
+export interface AppInitialType {
   isLoading: boolean;
   appError: string;
 }

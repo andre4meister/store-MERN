@@ -8,6 +8,7 @@ import MyHeader from 'components/Header/Header';
 import { UserAPI } from 'services/userAPI';
 import { fetchGetProfile } from 'store/user/user-thunks';
 import Loader from 'components/Loader/Loader';
+import { fetchCategories } from 'store/dashboard/dashboard-thunks';
 
 const { Header, Sider, Content } = Layout;
 
@@ -20,6 +21,7 @@ const MainLayout: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
+    dispatch(fetchCategories({}));
     dispatch(fetchGetProfile());
   }, []);
 

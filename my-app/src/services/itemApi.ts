@@ -1,4 +1,6 @@
+import { ObjectWithStringValues } from 'store/commonTypes';
 import { ItemType } from 'store/item/item-types';
+import { createFilterForItemSearch } from 'utils/itemUtils/createFilterForItemSearch';
 import axiosInstance from './axios';
 
 export class ItemApi {
@@ -10,12 +12,12 @@ export class ItemApi {
       return e;
     }
   }
-  // WIP fix any type
 
-  static async getItems(filters: any) {
-    // WIP make util for formating filters to ?key=value&  keyform
+  static async getItems(filters?: ObjectWithStringValues) {
     try {
-      const response = await axiosInstance.get<ItemType[]>('items' + filters ? filters : '');
+      const response = await axiosInstance.get<ItemType[]>(
+        `items${filters ? createFilterForItemSearch(filters || {}) : ''}`,
+      );
       return response;
     } catch (e) {
       return e;

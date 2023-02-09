@@ -5,6 +5,7 @@
 }
 
 .photoContainer {
+    max-height: 50vw;
 
     img {
         max-width: 100%;
@@ -40,10 +41,12 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    list-style: none;
     max-width: 100px;
     width: 100%;
     height: auto;
-    margin: 10px 0;
+    padding: 0 $indent-medium;
+
 }
 
 .photoInGallery {

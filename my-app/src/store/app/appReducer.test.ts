@@ -1,9 +1,9 @@
-import app, { initialAppState } from './app';
+import app, { AppInitialType, initialAppState } from './app';
 
 describe('app reducer should work correctly', () => {
   it('should handle toggleIsLoading', () => {
     const isLoading = true;
-    const expectedState = {
+    const expectedState: AppInitialType = {
       isLoading,
       appError: '',
     };

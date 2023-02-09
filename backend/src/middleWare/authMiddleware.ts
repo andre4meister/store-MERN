@@ -18,7 +18,6 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
     req.body.decodedData = decodedData;
     next();
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ message: 'expire token', error });
   }
 }

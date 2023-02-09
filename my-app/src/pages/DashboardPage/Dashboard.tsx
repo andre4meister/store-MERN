@@ -3,10 +3,9 @@ import { Button, Col, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { settingsMenuItems } from '../../components/SettingsMenu/SettingsMenu';
-import { logout } from 'store/user/user';
 import cn from 'classnames';
 import { useEffect } from 'react';
-import { fetchAllItems, fetchCategories } from 'store/dashboard/dashboard-thunks';
+import { fetchItems } from 'store/dashboard/dashboard-thunks';
 import { LogoutOutlined } from '@ant-design/icons';
 import DashboardNav from 'components/DashoboardNav/DashboardNav';
 import ItemsList from 'components/ItemsList/ItemsList';
@@ -23,10 +22,7 @@ const Dashboard = () => {
   const { isAuth } = useAppSelector((state) => state.userReducer);
 
   useEffect(() => {
-    if (categories.length === 0) {
-      dispatch(fetchCategories({}));
-      dispatch(fetchAllItems());
-    }
+    dispatch(fetchItems());
   }, []);
 
   return (

@@ -6,12 +6,16 @@ interface DashboardInitialType {
   categories: CategoryType[];
   subCategories: SubCategoryType[];
   likedItems: ItemType[];
+  searchedItems: ItemType[];
+  recommendItems: ItemType[];
 }
 
 export const initialDashboardState: DashboardInitialType = {
-  categories: [] as CategoryType[],
-  subCategories: [] as SubCategoryType[],
-  likedItems: [] as ItemType[],
+  categories: [],
+  subCategories: [],
+  likedItems: [],
+  searchedItems: [],
+  recommendItems: [],
 };
 
 const dashboardReducer = createSlice({
@@ -27,9 +31,16 @@ const dashboardReducer = createSlice({
     setLikedItems(state, action: PayloadAction<ItemType[]>) {
       state.likedItems = action.payload;
     },
+    setRecommendItems(state, action: PayloadAction<ItemType[]>) {
+      state.recommendItems = action.payload;
+    },
+    setSearchedItems(state, action: PayloadAction<ItemType[]>) {
+      state.searchedItems = action.payload;
+    },
   },
 });
 
-export const { setCategories, setSubCategories, setLikedItems } = dashboardReducer.actions;
+export const { setCategories, setSubCategories, setLikedItems, setRecommendItems, setSearchedItems } =
+  dashboardReducer.actions;
 
 export default dashboardReducer.reducer;
