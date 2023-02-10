@@ -33,7 +33,7 @@ interface UserType {
   phone: string;
   deliveryMethod: DeliverMethodType[];
   likedItems: ItemType[];
-  basket: ItemType[];
+  cart: ItemType[];
   orders: OrderType[];
 }
 
@@ -66,6 +66,7 @@ const userSchema = new Schema({
   },
   password: { type: String, required: true },
   phone: { type: String },
+  // WIP
   // deliveryMethod: { type: [deliverySchema], required: false },
   likedItems: [
     {
@@ -76,7 +77,7 @@ const userSchema = new Schema({
       partialFilterExpression: { name: { $exists: true } },
     },
   ],
-  basket: [
+  cart: [
     {
       type: Schema.Types.ObjectId,
       required: false,
@@ -96,6 +97,7 @@ const userSchema = new Schema({
   ],
 });
 
+// WIP doesn`t work, delete or fix
 userSchema.method('deletePassword', function deletePassword() {
   const obj: Partial<UserType> = { ...this.toObject() };
   delete obj.password;

@@ -1,9 +1,9 @@
 import { Handler, Response } from 'express';
-import { Category, SubCategory } from './category-types';
+import { Category } from './category-types';
 
 const getAllCategories: Handler = async (req, res: Response) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().populate('subCategories');
     if (!categories) {
       return res.status(400).json({ message: 'Some error, no such categories' });
     }

@@ -11,6 +11,6 @@ orderRouter.post('/', createOrder);
 
 orderRouter.put('/:id', updateOrder);
 
-orderRouter.delete('/:id', deleteOrder);
+orderRouter.delete('/:userId/:orderId', deleteOrder);
 
 export { orderRouter };

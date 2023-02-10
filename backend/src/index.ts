@@ -13,11 +13,12 @@ import {
   createCategoryValidation,
   createItemValidation,
   createOrderValidation,
+  createReviewValidation,
   createSubCategoryValidation,
   loginValidation,
   registerValidation,
 } from './utils/validationChecks';
-
+import { reviewRouter } from './review-model/review-router';
 
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
@@ -33,8 +34,8 @@ app
   .use('/category', oneOf([createCategoryValidation]), categoryRouter)
   .use('/subCategory', oneOf([createSubCategoryValidation]), subCategoryRouter)
   .use('/items', oneOf([createItemValidation]), itemRouter)
-  .use('/orders', oneOf([createOrderValidation]), orderRouter);
-
+  .use('/orders', oneOf([createOrderValidation]), orderRouter)
+  .use('/reviews', oneOf([createReviewValidation]), reviewRouter);
 
 const start = async () => {
   try {

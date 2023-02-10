@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { ItemType } from '../product-model/item-types';
 import { DeliverMethodType, ShipmentMethodType } from '../user-model/user-types';
 
 enum OrderStatus {
@@ -26,6 +27,7 @@ interface OrderType {
   readonly userId: UserIdType;
   orderStatus: OrderStatus;
   paymentStatus: PaymentStatus;
+  items: ItemType[];
   price: number;
   message?: string;
   shipmentMethod: { type: StringConstructor; enum: typeof ShipmentMethodType };
@@ -44,6 +46,15 @@ const orderScheme = new Schema<OrderType>({
   paymentStatus: { type: String, enum: PaymentStatus, required: true },
   price: { type: Number, required: true, validate: { validator: (v: number) => v > 0, message: 'Incorrect price' } },
   message: { type: String },
+  items: [
+    {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'item',
+      sparse: true,
+      partialFilterExpression: { name: { $exists: true } },
+    },
+  ],
   shipmentMethod: {
     type: String,
     required: true,

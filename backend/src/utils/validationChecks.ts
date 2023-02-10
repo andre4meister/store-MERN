@@ -42,6 +42,12 @@ const createOrderValidation = [
   check('delivery', 'Incorrect delivery').isObject().exists(),
 ];
 
+const createReviewValidation = [
+  check('userId', 'Incorrect userId').isMongoId(),
+  check('text', 'Incorrect userId').isString(),
+  check('point', 'Incorrect point').isNumeric().exists(),
+];
+
 const createCategoryValidation = [
   check('name', 'Incorrect item name').isString().isLength({ min: 3, max: 100 }),
   check('description', 'Incorrect description').isString().exists(),
@@ -53,7 +59,6 @@ const createSubCategoryValidation = [
   check('name', 'Incorrect item name').isString().isLength({ min: 3, max: 100 }),
   check('description', 'Incorrect description').isString().exists(),
   check('photo', 'Incorrect photo').isString().exists(),
-
 ];
 
 const allValidationChecks = [
@@ -70,6 +75,7 @@ export {
   createCategoryValidation,
   createItemValidation,
   createOrderValidation,
+  createReviewValidation,
   createSubCategoryValidation,
   loginValidation,
   registerValidation,

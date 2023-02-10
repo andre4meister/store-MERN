@@ -12,11 +12,10 @@ const getAllItems: Handler = async (req, res: Response) => {
     if (req.query) {
       const sort = req.query.sort as string;
       const limit = req.query.sort;
-      console.log('category:' + req.query.category);
       const items = await Item.find(createFilterForItems(req.query))
         .limit(Number(limit) || 30)
         .sort(createSortOptions(sort))
-        .populate(['category', 'subCategory'])
+        .populate(['category', 'subCategory', 'reviews'])
         .collation({ locale: 'en', strength: 2 });
       return res.status(200).json(items);
     }
@@ -33,7 +32,7 @@ const getAllItems: Handler = async (req, res: Response) => {
 
 const getItem: Handler = async (req, res: Response) => {
   try {
-    const item = await Item.findById(req.params.id).populate(['category', 'subCategory']);
+    const item = await Item.findById(req.params.id).populate(['category', 'subCategory', 'reviews']);
 
     if (!item) {
       return res.status(400).json({ message: 'Item with such id doesn`t exist' });
@@ -54,7 +53,6 @@ const createItem: Handler = async (req, res: Response) => {
 
     res.status(201).json(item);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
   }
 };
@@ -64,17 +62,17 @@ const updateItem: Handler = async (req, res: Response) => {
     const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true }).populate([
       'category',
       'subCategory',
+      'reviews',
     ]);
     res.status(200).json(item);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
   }
 };
 
 const deleteItem: Handler = async (req, res: Response) => {
   try {
-    const item = await Item.findByIdAndDelete(req.params.id).populate(['category', 'subCategory']);
+    const item = await Item.findByIdAndDelete(req.params.id).populate(['category', 'subCategory', 'reviews']);
     res.status(200).json(item);
   } catch (error) {
     res.status(500).json({ message: 'Some error has occured', error: error });

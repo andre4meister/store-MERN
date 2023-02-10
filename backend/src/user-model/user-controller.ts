@@ -7,6 +7,7 @@ import { deletePassword } from '../utils/deletePassword';
 
 const User = mongoose.model<UserType, Model<UserType, any, UserMethods>>('user', userSchema);
 
+// WIP implement this type
 // interface TypedRequest<T extends Query, U> extends Express.Request {
 //   body: U;
 //   query: T;
@@ -45,6 +46,110 @@ const updateUser: Handler = async (req, res) => {
         new: true,
         upsert: true,
       });
+      return res.status(200).json(deletePassword(user._doc));
+    } else {
+      return res.status(404).json({ message: 'Such user doesn`t exist' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Some error has occured', error: error });
+  }
+};
+
+const addUserLikedItem: Handler = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(404).json({ message: 'Id wasn`t denoted' });
+    }
+
+    let user = await User.findById(req.params.id);
+
+    if (!!user) {
+      user = await User.findByIdAndUpdate(
+        req.params.id,
+        { $push: { likedItems: req.body.likedItem } },
+        {
+          new: true,
+          upsert: true,
+        },
+      );
+      return res.status(200).json(deletePassword(user._doc));
+    } else {
+      return res.status(404).json({ message: 'Such user doesn`t exist' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Some error has occured', error: error });
+  }
+};
+
+const deleteUserLikedItem: Handler = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(404).json({ message: 'Id wasn`t denoted' });
+    }
+
+    let user = await User.findById(req.params.id);
+
+    if (!!user) {
+      user = await User.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { likedItems: req.body.likedItem } },
+        {
+          new: true,
+          upsert: true,
+        },
+      );
+      return res.status(200).json(deletePassword(user._doc));
+    } else {
+      return res.status(404).json({ message: 'Such user doesn`t exist' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Some error has occured', error: error });
+  }
+};
+
+const addItemToUserCart: Handler = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(404).json({ message: 'Id wasn`t denoted' });
+    }
+
+    let user = await User.findById(req.params.id);
+
+    if (!!user) {
+      user = await User.findByIdAndUpdate(
+        req.params.id,
+        { $push: { cart: req.body.item } },
+        {
+          new: true,
+          upsert: true,
+        },
+      );
+      return res.status(200).json(deletePassword(user._doc));
+    } else {
+      return res.status(404).json({ message: 'Such user doesn`t exist' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Some error has occured', error: error });
+  }
+};
+
+const deleteItemFromUserCart: Handler = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(404).json({ message: 'Id wasn`t denoted' });
+    }
+
+    let user = await User.findById(req.params.id);
+
+    if (!!user) {
+      user = await User.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { cart: req.body.item } },
+        {
+          new: true,
+          upsert: true,
+        },
+      );
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -100,4 +205,14 @@ const deleteUser: Handler = async (req, res) => {
   }
 };
 
-export { getUsers, deleteUser, updateUser, updateUserPassword, User };
+export {
+  getUsers,
+  deleteUser,
+  updateUser,
+  updateUserPassword,
+  addItemToUserCart,
+  addUserLikedItem,
+  deleteItemFromUserCart,
+  deleteUserLikedItem,
+  User,
+};
