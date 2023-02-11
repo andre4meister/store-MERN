@@ -1,4 +1,3 @@
-import { ItemType } from 'store/item/item-types';
 import userReducer, { UserReducerStateType } from './user';
 import { UserType, RoleEnum, ShipmentMethodType } from './user-types';
 
@@ -20,8 +19,9 @@ const initialState: UserReducerStateType = {
       },
     ],
     likedItems: [],
-    basketItems: [],
+    cart: [],
     orders: [],
+    reviews: [],
   },
   loginError: '',
   isAuth: true,
@@ -37,7 +37,7 @@ describe('userReducer', () => {
     expect(userReducer(undefined, { type: '', payload: {} })).toEqual(expectedState);
   });
 
-  it('should handle login', () => {
+  it('should handle setUserData', () => {
     const userData: UserType = {
       _id: '123',
       userName: 'johndoe',
@@ -54,16 +54,17 @@ describe('userReducer', () => {
           chosenDepartment: 1,
         },
       ],
-      likedItems: [] as ItemType[],
-      basketItems: [] as ItemType[],
-      orders: [] as [],
+      likedItems: [],
+      cart: [],
+      reviews: [],
+      orders: [],
     };
     const expectedState = {
       userData,
       loginError: '',
       isAuth: true,
     };
-    expect(userReducer(undefined, { type: 'user/login', payload: userData })).toEqual(expectedState);
+    expect(userReducer(undefined, { type: 'user/setUserData', payload: userData })).toEqual(expectedState);
   });
 
   it('should handle logout', () => {

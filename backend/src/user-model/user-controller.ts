@@ -2,10 +2,10 @@ import { Handler, Response } from 'express';
 import mongoose, { Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import { UserMethods, userSchema, UserType } from './user-types';
+import { userSchema, UserType } from './user-types';
 import { deletePassword } from '../utils/deletePassword';
 
-const User = mongoose.model<UserType, Model<UserType, any, UserMethods>>('user', userSchema);
+const User = mongoose.model<UserType, Model<UserType, any, any>>('user', userSchema);
 
 // WIP implement this type
 // interface TypedRequest<T extends Query, U> extends Express.Request {
@@ -17,7 +17,7 @@ const getUsers: Handler = async (req, res: Response) => {
   try {
     let users;
     if (req.params.id) {
-      users = await User.findById(req.params.id);
+      users = await User.findById(req.params.id).populate(['likedItems', 'orders', 'cart']);
 
       if (!users) {
         return res.status(404).send({ message: 'Such user doesn`t exist' });
@@ -25,7 +25,8 @@ const getUsers: Handler = async (req, res: Response) => {
       return res.status(200).send(deletePassword(users._doc));
     }
 
-    users = await User.find();
+    users = await User.find().populate(['likedItems', 'orders', 'cart']);
+
     res.status(200).json(deletePassword(users));
   } catch (error) {
     console.log(error);
@@ -45,7 +46,8 @@ const updateUser: Handler = async (req, res) => {
       user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         upsert: true,
-      });
+      }).populate(['likedItems', 'orders', 'cart']);
+
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -57,21 +59,22 @@ const updateUser: Handler = async (req, res) => {
 
 const addUserLikedItem: Handler = async (req, res) => {
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.userId);
 
     if (!!user) {
       user = await User.findByIdAndUpdate(
-        req.params.id,
-        { $push: { likedItems: req.body.likedItem } },
+        req.params.userId,
+        { $push: { likedItems: req.body.itemId } },
         {
           new: true,
           upsert: true,
         },
-      );
+      ).populate(['likedItems', 'orders', 'cart']);
+
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -83,21 +86,22 @@ const addUserLikedItem: Handler = async (req, res) => {
 
 const deleteUserLikedItem: Handler = async (req, res) => {
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.userId);
 
     if (!!user) {
       user = await User.findByIdAndUpdate(
-        req.params.id,
-        { $pull: { likedItems: req.body.likedItem } },
+        req.params.userId,
+        { $pull: { likedItems: req.body.itemId } },
         {
           new: true,
           upsert: true,
         },
-      );
+      ).populate(['likedItems', 'orders', 'cart']);
+
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -109,21 +113,22 @@ const deleteUserLikedItem: Handler = async (req, res) => {
 
 const addItemToUserCart: Handler = async (req, res) => {
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.userId);
 
     if (!!user) {
       user = await User.findByIdAndUpdate(
-        req.params.id,
-        { $push: { cart: req.body.item } },
+        req.params.userId,
+        { $push: { cart: req.body.itemId } },
         {
           new: true,
           upsert: true,
         },
-      );
+      ).populate(['likedItems', 'orders', 'cart']);
+
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -135,21 +140,22 @@ const addItemToUserCart: Handler = async (req, res) => {
 
 const deleteItemFromUserCart: Handler = async (req, res) => {
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.userId);
 
     if (!!user) {
       user = await User.findByIdAndUpdate(
-        req.params.id,
-        { $pull: { cart: req.body.item } },
+        req.params.userId,
+        { $pull: { cart: req.body.itemId } },
         {
           new: true,
           upsert: true,
         },
-      );
+      ).populate(['likedItems', 'orders', 'cart']);
+
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });

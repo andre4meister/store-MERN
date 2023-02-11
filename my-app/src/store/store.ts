@@ -3,6 +3,8 @@ import userReducer from './user/user';
 import dashboardReducer from './dashboard/dashboard';
 import itemReducer from './item/item';
 import appReducer from './app/app';
+import orderReducer from './order/order';
+import alertReducer from './alert/alert';
 import { initialStore } from './initialStore';
 
 const rootReducer = combineReducers({
@@ -10,6 +12,8 @@ const rootReducer = combineReducers({
   dashboardReducer,
   itemReducer,
   appReducer,
+  orderReducer,
+  alertReducer,
 });
 
 export const createReduxStore = (initialState: RootState = initialStore as RootState) => {

@@ -37,10 +37,6 @@ interface UserType {
   orders: OrderType[];
 }
 
-interface UserMethods {
-  deletePassword(): Omit<UserType, 'password'>;
-}
-
 const deliverySchema = new Schema<DeliverMethodType>({
   country: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
   city: { type: String, required: true, validate: { validator: (v: string) => v.length >= 2 } },
@@ -97,11 +93,4 @@ const userSchema = new Schema({
   ],
 });
 
-// WIP doesn`t work, delete or fix
-userSchema.method('deletePassword', function deletePassword() {
-  const obj: Partial<UserType> = { ...this.toObject() };
-  delete obj.password;
-  return obj;
-});
-
-export { userSchema, UserType, DeliverMethodType, UserMethods, RoleEnum, ShipmentMethodType, deliverySchema };
+export { userSchema, UserType, DeliverMethodType, RoleEnum, ShipmentMethodType, deliverySchema };

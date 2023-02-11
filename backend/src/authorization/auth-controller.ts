@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { User } from '../user-model/user-controller';
 import bcrypt from 'bcrypt';
-import { UserMethods, userSchema, UserType } from '../user-model/user-types';
+import { userSchema, UserType } from '../user-model/user-types';
 import { ValidationError, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import secretJWT from '../utils/secret';

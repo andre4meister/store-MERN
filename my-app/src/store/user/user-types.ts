@@ -1,4 +1,5 @@
-import { ItemType } from '../item/item-types';
+import { OrderType } from 'store/order/order-types';
+import { ItemType, ReviewType } from '../item/item-types';
 
 export enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',
@@ -6,6 +7,10 @@ export enum ShipmentMethodType {
   Meest = 'Meest Express',
 }
 
+export interface ChangeUserCartAndWishItemsType {
+  userId: string;
+  itemId: string;
+}
 export interface DeliverMethodType {
   country: string;
   city: string;
@@ -21,14 +26,15 @@ export enum RoleEnum {
 }
 export interface UserType {
   readonly _id: string;
-  readonly userName: string;
-  readonly role: RoleEnum;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly phone: string;
-  readonly email: string;
+  userName: string;
+  role: RoleEnum;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
   deliveryMethod: DeliverMethodType[];
   likedItems: ItemType[];
-  basketItems: ItemType[];
-  orders: [];
+  cart: ItemType[];
+  reviews: ReviewType[];
+  orders: OrderType[];
 }

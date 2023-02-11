@@ -23,11 +23,11 @@ userRouter.put('/:id', updateUser);
 
 userRouter.put('/change-password/:id', updateUserPassword);
 
-userRouter.put('/addItemToUserCart/:id', addItemToUserCart);
-userRouter.put('/deleteItemFromUserCart/:id', deleteItemFromUserCart);
+userRouter.put('/addItemToUserCart/:userId', addItemToUserCart);
+userRouter.put('/deleteItemFromUserCart/:userId', deleteItemFromUserCart);
 
-userRouter.put('/addUserLikedItem/:id', addUserLikedItem);
-userRouter.put('/deleteUserLikedItem/:id', deleteUserLikedItem);
+userRouter.put('/addUserToLikedItems/:userId', addUserLikedItem);
+userRouter.put('/deleteUserFromLikedItems/:userId', deleteUserLikedItem);
 
 userRouter.delete('/:id', deleteUser);
 

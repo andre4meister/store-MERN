@@ -10,6 +10,7 @@ import { initialItemState } from 'store/item/item';
 import { initialUserState } from 'store/user/user';
 import { initialAppState } from 'store/app/app';
 import { renderWithAll } from '../../tests/helpers/renderWithAll';
+import { initialStore } from 'store/initialStore';
 
 describe(DashboardNavItem, () => {
   it('should render a li element and p inside li with the correct name', () => {
@@ -68,15 +69,7 @@ describe(DashboardNav, () => {
 
     const { getByTestId, getAllByTestId } = renderWithAll({
       component: <DashboardNav />,
-      initialState: {
-        dashboardReducer: {
-          ...initialDashboardState,
-          categories,
-        },
-        itemReducer: initialItemState,
-        userReducer: initialUserState,
-        appReducer: initialAppState,
-      },
+      initialState: { ...initialStore, dashboardReducer: { ...initialDashboardState, categories } },
     });
 
     const ul = getByTestId('dashbordNavItemUl');

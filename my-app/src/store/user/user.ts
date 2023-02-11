@@ -40,10 +40,11 @@ const userReducer = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    login(state, action: PayloadAction<UserType>) {
+    setUserData(state, action: PayloadAction<UserType>) {
       state.userData = action.payload;
       state.isAuth = true;
       state.loginError = '';
+      localStorage.setItem('userData', JSON.stringify(action.payload));
     },
     logout(state, action: PayloadAction) {
       state.loginError = '';
@@ -58,6 +59,6 @@ const userReducer = createSlice({
   },
 });
 
-export const { login, loginFailure, logout } = userReducer.actions;
+export const { setUserData, loginFailure, logout } = userReducer.actions;
 
 export default userReducer.reducer;

@@ -1,6 +1,6 @@
 import { WithToken } from 'store/commonTypes';
 import { UpdateUserType, WithIdType } from 'store/user/user';
-import { UserType } from 'store/user/user-types';
+import { ChangeUserCartAndWishItemsType, UserType } from 'store/user/user-types';
 import getToken from 'utils/getToken';
 import axiosInstance from './axios';
 
@@ -77,6 +77,54 @@ export class UserAPI {
   static async deleteAccount(data: WithIdType) {
     try {
       const response = await axiosInstance.delete<UserType>(`users/${data._id}`);
+      return response;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  static async addItemToLiked(data: ChangeUserCartAndWishItemsType) {
+    try {
+      const response = await axiosInstance.put<UserType>(
+        `users/addUserToLikedItems/${data.userId}`,
+        JSON.stringify(data),
+      );
+      return response;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  static async deleteItemFromLiked(data: ChangeUserCartAndWishItemsType) {
+    try {
+      const response = await axiosInstance.put<UserType>(
+        `users/deleteUserFromLikedItems/${data.userId}`,
+        JSON.stringify(data),
+      );
+      return response;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  static async addItemToUserCart(data: ChangeUserCartAndWishItemsType) {
+    try {
+      const response = await axiosInstance.put<UserType>(
+        `users/addItemToUserCart/${data.userId}`,
+        JSON.stringify(data),
+      );
+      return response;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  static async deleteItemFromUserCart(data: ChangeUserCartAndWishItemsType) {
+    try {
+      const response = await axiosInstance.put<UserType>(
+        `users/deleteItemFromUserCart/${data.userId}`,
+        JSON.stringify(data),
+      );
       return response;
     } catch (e) {
       return e;

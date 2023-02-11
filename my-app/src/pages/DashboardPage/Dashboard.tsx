@@ -74,10 +74,7 @@ const Dashboard = () => {
       </Col>
       <Col className={styles.content}>
         <div className={styles.slider}>
-          <img
-            src="https://content.rozetka.com.ua/banner_category/image/original/303439568.jpg"
-            alt="discount slider"
-          />
+          <img src="https://content.rozetka.com.ua/files/images/original/311680078.jpg" alt="discount slider" />
         </div>
         <div className={styles.dashboardLists}>
           <ItemsList items={likedItems} title="Last seen items" oneLine={true} />

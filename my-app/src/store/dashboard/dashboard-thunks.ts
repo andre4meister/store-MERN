@@ -6,7 +6,7 @@ import { CategoryType, SubCategoryType } from 'store/category/category-types';
 import { setError, toggleIsLoading } from 'store/app/app';
 import { setCategories, setSubCategories, setLikedItems, setSearchedItems } from './dashboard';
 import { ItemApi } from 'services/itemApi';
-import { setItemData } from 'store/item/item';
+import { addNotification } from 'store/alert/alert';
 
 export const fetchCategories = createAsyncThunk<void, { id?: string }>('dashboard/category', async (data, thunkAPI) => {
   try {
@@ -16,12 +16,12 @@ export const fetchCategories = createAsyncThunk<void, { id?: string }>('dashboar
     if (response?.status === 200) {
       thunkAPI.dispatch(setCategories(response.data));
     } else {
-      // WIP read error
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
       thunkAPI.dispatch(setError('Couldn`t fetch category'));
     }
     thunkAPI.dispatch(toggleIsLoading(false));
   } catch (error) {
-    //  WIP alert here
+    thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
     thunkAPI.dispatch(setError('Something is wrong Thunk'));
   }
 });
@@ -35,12 +35,12 @@ export const fetchSubCategories = createAsyncThunk<void, { id?: string }>(
       if (response?.status === 200) {
         thunkAPI.dispatch(setSubCategories(response.data));
       } else {
-        // WIP read error
+        thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
         thunkAPI.dispatch(setError('Couldn`t fetch subCategory'));
       }
       thunkAPI.dispatch(toggleIsLoading(false));
     } catch (error) {
-      //  WIP alert here
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
       thunkAPI.dispatch(setError('Something is wrong Thunk'));
     }
   },
@@ -53,12 +53,12 @@ export const fetchItems = createAsyncThunk<void, void>('dashboard/all-items', as
     if (response?.status === 200) {
       thunkAPI.dispatch(setLikedItems(response.data));
     } else {
-      // WIP read error
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
       thunkAPI.dispatch(setError('Couldn`t fetch items'));
     }
     thunkAPI.dispatch(toggleIsLoading(false));
   } catch (error) {
-    //  WIP alert here
+    thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
     thunkAPI.dispatch(setError('Something is wrong Thunk'));
   }
 });
@@ -71,11 +71,11 @@ export const fetchItemsWithFilters = createAsyncThunk<void, { [keys: string]: st
       if (response?.status === 200) {
         thunkAPI.dispatch(setSearchedItems(response.data));
       } else {
-        // WIP read error
+        thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
         thunkAPI.dispatch(setError('Couldn`t fetch items'));
       }
     } catch (error) {
-      //  WIP alert here
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
       thunkAPI.dispatch(setError('Something is wrong Thunk'));
     }
   },
