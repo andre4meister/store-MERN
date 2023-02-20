@@ -85,7 +85,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
       />
       <Menu theme="dark" mode="horizontal" className={styles.menu}>
         <Menu.Item key="favoutire">
-          <NavLink to="cart">
+          <NavLink to="favourite">
             <Badge
               status="processing"
               count={countLikedItems(userData.likedItems)}

@@ -7,9 +7,9 @@ const Order = mongoose.model('order', orderScheme);
 
 const getAllOrders: Handler = async (req, res: Response) => {
   try {
-    const userId = req.query.userId;
+    const { userId, orderStatus } = req.query;
     if (userId) {
-      const orders = await Order.find({ userId, orderStatus: req.query.orderStatus });
+      const orders = await Order.find({ userId }).populate('items.item');
       return res.status(200).json(orders);
     }
 
@@ -38,12 +38,16 @@ const getOrder: Handler = async (req, res: Response) => {
 
 const createOrder: Handler = async (req, res: Response) => {
   try {
-    console.log(req.body);
-    const { userId, orderBody } = req.body;
-    const order = await Order.create({ ...orderBody, orderStatus: OrderStatus.created });
-
-    await User.findByIdAndUpdate(userId, { $push: { orders: order._id } });
-    res.status(201).json(order);
+    const { userId, order } = req.body;
+    const createdOrder = await (
+      await Order.create({
+        ...order,
+        orderStatus: OrderStatus.created,
+        createdAt: new Date().toLocaleString(),
+      })
+    ).populate('items.item');
+    await User.findByIdAndUpdate(userId, { $push: { orders: createdOrder._id } });
+    res.status(201).json(createdOrder);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
@@ -52,7 +56,9 @@ const createOrder: Handler = async (req, res: Response) => {
 
 const updateOrder: Handler = async (req, res: Response) => {
   try {
-    const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true });
+    const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true })
+      .populate('items.item')
+      .exec();
 
     if (!order) {
       return res.status(400).json({ message: 'Order with such id doesn`t exist' });

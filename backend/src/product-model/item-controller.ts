@@ -32,7 +32,11 @@ const getAllItems: Handler = async (req, res: Response) => {
 
 const getItem: Handler = async (req, res: Response) => {
   try {
-    const item = await Item.findById(req.params.id).populate(['category', 'subCategory', 'reviews']);
+    const item = await Item.findById(req.params.id).populate([
+      'category',
+      'subCategory',
+      { path: 'reviews', populate: 'author' },
+    ]);
 
     if (!item) {
       return res.status(400).json({ message: 'Item with such id doesn`t exist' });

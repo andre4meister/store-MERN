@@ -98,7 +98,32 @@
 }
 
 .buttonsContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
     button {
         margin: 10px 5px;
+    }
+
+    .cartSpan {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $color-blue;
+
+        a {
+            text-decoration: underline;
+        }
+    }
+
+    .inCartIcon {
+        margin-right: 3px;
+
+        svg {
+            fill: $color-blue;
+            width: 24px;
+            height: 24px;
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 import { OrderType } from '../order-model/order-types';
-import { ItemType } from '../product-model/item-types';
+import { ItemType, ShopingCartItem } from '../product-model/item-types';
 
 enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',
@@ -33,7 +33,7 @@ interface UserType {
   phone: string;
   deliveryMethod: DeliverMethodType[];
   likedItems: ItemType[];
-  cart: ItemType[];
+  cart: ShopingCartItem[];
   orders: OrderType[];
 }
 
@@ -75,11 +75,18 @@ const userSchema = new Schema({
   ],
   cart: [
     {
-      type: Schema.Types.ObjectId,
-      required: false,
-      ref: 'item',
-      sparse: true,
-      partialFilterExpression: { name: { $exists: true } },
+      item: {
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: 'item',
+        sparse: true,
+        partialFilterExpression: { name: { $exists: true } },
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        ref: 'item',
+      },
     },
   ],
   orders: [

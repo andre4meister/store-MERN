@@ -66,7 +66,11 @@ const login: RequestHandler<
         message: 'Incorrect password or email',
       });
     }
-    const userData = await User.findOne({ email });
+    const userData = await User.findOne({ email }).populate([
+      { path: 'likedItems', populate: { path: 'reviews' } },
+      'orders',
+      { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+    ]);
 
     if (!userData) {
       res.status(400).json({ message: 'Such user doesn`t exist' });

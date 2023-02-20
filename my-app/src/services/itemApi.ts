@@ -1,6 +1,6 @@
 import { ObjectWithStringValues } from 'store/commonTypes';
 import { ItemType } from 'store/item/item-types';
-import { createFilterForItemSearch } from 'utils/itemUtils/createFilterForItemSearch';
+import { createQueriesForFetch } from 'utils/commonUtils/createQueriesForFetch';
 import axiosInstance from './axios';
 
 export class ItemApi {
@@ -16,7 +16,7 @@ export class ItemApi {
   static async getItems(filters?: ObjectWithStringValues) {
     try {
       const response = await axiosInstance.get<ItemType[]>(
-        `items${filters ? createFilterForItemSearch(filters || {}) : ''}`,
+        `items${filters ? createQueriesForFetch(filters || {}) : ''}`,
       );
       return response;
     } catch (e) {

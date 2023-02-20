@@ -20,7 +20,19 @@ export interface ItemType {
 
 export interface ReviewType {
   _id: string;
+  createdAt: string;
   author: UserType;
   text: string;
   point: number;
+  photos: string[];
+}
+
+export interface FetchLeaveReview {
+  body: {
+    author: string;
+    text: string;
+    point: number;
+    photos?: string[];
+  };
+  itemId: string;
 }

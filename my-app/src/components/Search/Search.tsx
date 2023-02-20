@@ -65,7 +65,7 @@ const MySearch: FC<SearchProps> = ({
             searchedItems.map((item) => {
               return (
                 <li className={styles.searchedListItem} key={item._id}>
-                  <Link to={`/item/${item._id}`}>
+                  <Link to={`/item/${item._id}/main`}>
                     <div className={styles.imageContainer}>
                       <img src={item.photos[0]} alt={item.name} />
                     </div>

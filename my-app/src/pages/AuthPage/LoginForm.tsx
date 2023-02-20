@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { useAppDispatch } from 'hooks/redux';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LoginFormType } from 'services/userAPI';
 import { fetchLogin } from 'store/user/user-thunks';

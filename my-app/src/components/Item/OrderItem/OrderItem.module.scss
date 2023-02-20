@@ -1,0 +1,82 @@
+@import '../../../styles/variables.module.scss';
+
+.listItem {
+    display: flex;
+    padding-bottom: 16px;
+    flex-direction: row;
+    align-items: flex-start;
+
+    .wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding-bottom: 16px;
+        width: 100%;
+
+        a {
+            width: 40%;
+            margin-bottom: 0;
+            font-size: 12px;
+            line-height: 17px;
+            color: #3e77aa;
+            cursor: pointer;
+            text-decoration: none;
+            // width: 100%;
+            // margin-bottom: 16px;
+
+            .itemFigure {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                // display: flex;
+                // flex-direction: row;
+                // align-items: center;
+
+                span {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    width: 56px;
+                    height: 56px;
+                    margin-right: 16px;
+
+                    img {
+                        width: auto;
+                        max-width: 100%;
+                        height: auto;
+                        max-height: 100%;
+                    }
+
+                    figcaption {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .itemData {
+            display: flex;
+            flex-direction: row;
+            width: 60%;
+            //width: 100%;
+
+            .indicator {
+                width: 33.33333%;
+                flex-grow: 1;
+                text-align: center;
+
+                .indicatorLabel {
+                    display: block;
+                    margin-bottom: 4px;
+                    color: #797878;
+                }
+
+                span {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

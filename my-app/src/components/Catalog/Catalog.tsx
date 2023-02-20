@@ -27,7 +27,9 @@ const Catalog: FC = () => {
                 {category.subCategories.map((subCategory) => {
                   return (
                     <li className={styles.subCategoryListItem} key={Math.random() * 10000}>
-                      <Link to={`/items/${category}/${subCategory}`}>{'subCategory.name'}</Link>
+                      <Link to={`/items/?category=${category.name}&subCategory=${subCategory.name}`}>
+                        {subCategory.name}
+                      </Link>
                     </li>
                   );
                 })}

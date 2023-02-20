@@ -1,5 +1,5 @@
-import { OrderType } from 'store/order/order-types';
-import { ItemType, ReviewType } from '../item/item-types';
+import { OrderType, ShoppingCartItem } from 'store/order/order-types';
+import { ItemType } from '../item/item-types';
 
 export enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',
@@ -34,7 +34,10 @@ export interface UserType {
   email: string;
   deliveryMethod: DeliverMethodType[];
   likedItems: ItemType[];
-  cart: ItemType[];
-  reviews: ReviewType[];
+  cart: ShoppingCartItem[];
   orders: OrderType[];
+}
+
+export interface FetchCartItem extends ChangeUserCartAndWishItemsType {
+  quantity: number;
 }

@@ -21,7 +21,6 @@ const initialState: UserReducerStateType = {
     likedItems: [],
     cart: [],
     orders: [],
-    reviews: [],
   },
   loginError: '',
   isAuth: true,
@@ -32,7 +31,7 @@ describe('userReducer', () => {
     const expectedState = {
       userData: {} as UserType,
       loginError: '',
-      isAuth: false,
+      isAuth: undefined,
     };
     expect(userReducer(undefined, { type: '', payload: {} })).toEqual(expectedState);
   });
@@ -56,7 +55,6 @@ describe('userReducer', () => {
       ],
       likedItems: [],
       cart: [],
-      reviews: [],
       orders: [],
     };
     const expectedState = {

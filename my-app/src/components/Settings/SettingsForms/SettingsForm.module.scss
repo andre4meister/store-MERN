@@ -1,0 +1,46 @@
+@import '../../../styles/variables.module.scss';
+
+.form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-rows: repeat(auto-fit, 80px);
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 100%;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: $indent-large;
+}
+
+.form__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 250px;
+    width: max-content;
+    max-width: 500px;
+    height: 80px;
+    text-align: center;
+
+    label {
+        font-size: $fontSize-xsmall !important;
+        color: #797878 !important;
+    }
+}
+
+.item__value {
+    font-size: $fontSize-small;
+}
+
+.form__button {
+    min-width: fit-content;
+    width: 150px;
+}
+
+.container__button {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+}

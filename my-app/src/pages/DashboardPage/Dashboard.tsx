@@ -1,28 +1,27 @@
 import styles from './Dashboard.module.scss';
 import { Button, Col, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { settingsMenuItems } from '../../components/SettingsMenu/SettingsMenu';
+import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
 import { useEffect } from 'react';
 import { fetchItems } from 'store/dashboard/dashboard-thunks';
 import { LogoutOutlined } from '@ant-design/icons';
 import DashboardNav from 'components/DashoboardNav/DashboardNav';
-import ItemsList from 'components/ItemsList/ItemsList';
+import ItemsList from 'components/Item/ItemsList/ItemsList';
 import { dispatchLogout } from 'store/user/user-thunks';
+import { settingsMenuItems } from 'utils/settings/settingsMenu';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const { categories, subCategories, likedItems } = useAppSelector((state) => state.dashboardReducer);
-  const { appError } = useAppSelector((state) => state.appReducer);
+  const { likedItems } = useAppSelector((state) => state.dashboardReducer);
   const { email, userName, firstName } = useAppSelector((state) => state.userReducer.userData);
   const { isAuth } = useAppSelector((state) => state.userReducer);
 
   useEffect(() => {
-    dispatch(fetchItems());
+    if (likedItems.length === 0) {
+      dispatch(fetchItems());
+    }
   }, []);
 
   return (

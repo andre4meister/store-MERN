@@ -10,9 +10,8 @@ const getReviews: Handler = async (req, res: Response) => {
   try {
     const sort = req.query.sort as string;
     const limit = req.query.sort;
-
-    if (req.query.author) {
-      const reviews = await Review.find({ author: req.query.author })
+    if (req.query.userId) {
+      const reviews = await Review.find({ author: req.query.userId })
         .limit(Number(limit) || 30)
         .sort(createSortOptions(sort))
         .populate('author', 'userName email');
@@ -85,13 +84,12 @@ const updateReview: Handler = async (req, res: Response) => {
 const deleteReview: Handler = async (req, res: Response) => {
   try {
     const review = await Review.findByIdAndDelete(req.params.reviewId);
-
     if (!review) {
       return res.status(404).json({ message: 'Review with such id was not found' });
     }
 
-    await Item.findByIdAndUpdate(
-      req.params.itemId,
+    await Item.findOneAndUpdate(
+      { reviews: { $in: [req.params.reviewId] } },
       {
         $pull: { reviews: req.params.reviewId },
       },

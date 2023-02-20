@@ -1,0 +1,27 @@
+@import '../../../styles/variables.module.scss';
+
+.container {
+    width: 100%;
+    min-height: 400px;
+    height: fit-content;
+    margin-top: $indent-large;
+}
+
+.title {
+    padding-left: $indent-large;
+    font-size: $fontSize-medium;
+}
+
+.itemsListContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-rows: 315px;
+    justify-content: space-evenly;
+    margin-top: $indent-small;
+    width: 100%;
+    height: fit-content;
+}
+
+.multiLine {
+    grid-template-rows: repeat(auto-fit, 315px);
+}

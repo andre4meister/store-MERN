@@ -2,10 +2,10 @@ import { LoginFormType, RegistrationFormType } from './../../services/userAPI';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserType } from './user-types';
 import { NavigateFunction } from 'react-router-dom';
-import { PersonalDataType } from 'components/SettingsForms/PersonalForm';
-import { ChangeEmailType } from 'components/SettingsForms/ChangeLoginForm';
-import { ChangePasswordType } from 'components/SettingsForms/ChangePasswordForm';
-import { ContactsFormType } from 'components/SettingsForms/ContactsForm';
+import { PersonalDataType } from 'components/Settings/SettingsForms/PersonalForm';
+import { ChangeEmailType } from 'components/Settings/SettingsForms/ChangeLoginForm';
+import { ChangePasswordType } from 'components/Settings/SettingsForms/ChangePasswordForm';
+import { ContactsFormType } from 'components/Settings/SettingsForms/ContactsForm';
 
 interface NavigateType {
   navigateFromLogin?: NavigateFunction | (() => void);
@@ -25,7 +25,7 @@ export interface RegistrationFormWithNavigate extends NavigateType {
   values: RegistrationFormType;
 }
 export interface UserReducerStateType {
-  isAuth: boolean;
+  isAuth: boolean | undefined;
   loginError: string;
   userData: UserType;
 }
@@ -33,7 +33,7 @@ export interface UserReducerStateType {
 export const initialUserState: Omit<UserReducerStateType, 'password'> = {
   userData: {} as UserType,
   loginError: '',
-  isAuth: false,
+  isAuth: undefined,
 };
 
 const userReducer = createSlice({

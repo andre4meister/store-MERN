@@ -1,18 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { ItemApi } from 'services/itemApi';
+import { OrderApi } from 'services/orderAPI';
 import { addNotification } from 'store/alert/alert';
 import { setError, toggleIsLoading } from 'store/app/app';
+import { setOrder, setOrderStatus } from './order';
+import { CreateOrderFormType, OrderStatus, OrderType } from './order-types';
 
-export const fetchItemById = createAsyncThunk<void, { id: string }>('item-by-id', async (data, thunkAPI) => {
+export const fetchCreateOrder = createAsyncThunk<void, CreateOrderFormType>('create-order', async (data, thunkAPI) => {
   try {
     thunkAPI.dispatch(toggleIsLoading(true));
-    const response = (await ItemApi.getItemById(data.id)) as AxiosResponse;
-    if (response?.status === 200) {
-      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'success' }));
+    const response = (await OrderApi.createOrder(data)) as AxiosResponse;
+    if (response?.status === 201) {
+      thunkAPI.dispatch(setOrder(response.data));
+      thunkAPI.dispatch(setOrderStatus(OrderStatus.created));
+      thunkAPI.dispatch(addNotification({ message: 'Your order was created ', type: 'success' }));
     } else {
       thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
-      thunkAPI.dispatch(setError('Couldn`t fetch item'));
+      thunkAPI.dispatch(setError('Couldn`t create order'));
     }
     thunkAPI.dispatch(toggleIsLoading(false));
   } catch (error) {
@@ -20,3 +24,23 @@ export const fetchItemById = createAsyncThunk<void, { id: string }>('item-by-id'
     thunkAPI.dispatch(setError('Something is wrong Thunk'));
   }
 });
+
+export const fetchOrdersByUserId = createAsyncThunk<OrderType[] | undefined, { userId: string }>(
+  'fetch-orders-by-user',
+  async (data, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(toggleIsLoading(true));
+      const response = (await OrderApi.getOrders(data)) as AxiosResponse;
+      if (response?.status === 200) {
+        return response.data;
+      } else {
+        thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
+        thunkAPI.dispatch(setError('Couldn`t fetch orders'));
+      }
+      thunkAPI.dispatch(toggleIsLoading(false));
+    } catch (error) {
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
+      thunkAPI.dispatch(setError('Something is wrong Thunk'));
+    }
+  },
+);

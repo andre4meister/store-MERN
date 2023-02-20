@@ -1,0 +1,22 @@
+@import '../../../styles/variables.module.scss';
+
+.contactsInfo {
+    .contactsRowItem {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: row;
+        position: relative;
+
+        .contactFormItem {
+            width: 100%;
+            padding: 0 10px;
+        }
+    }
+}
+
+
+.deliveryBlock {
+    padding-left: 40px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e9e9e9;
+}

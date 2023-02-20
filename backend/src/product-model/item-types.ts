@@ -3,6 +3,10 @@ import { CategoryType, SubCategoryType } from '../category-model/category-types'
 import { ReviewType } from '../review-model/review-types';
 import { ObjectWithStringValues } from '../types/commonTypes';
 
+interface ShopingCartItem {
+  item: ItemType;
+  quantity: number;
+}
 interface ItemType {
   readonly _id: string;
   name: string;
@@ -65,4 +69,4 @@ const itemScheme = new Schema<ItemType>({
   model: { type: String },
 });
 
-export { itemScheme, ItemType };
+export { itemScheme, ItemType, ShopingCartItem };

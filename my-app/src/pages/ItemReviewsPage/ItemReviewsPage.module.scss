@@ -1,0 +1,146 @@
+@import '../../styles/variables.module.scss';
+
+.reviewPage {
+    padding-left: 32px;
+    padding-right: 32px;
+    display: block;
+    margin: 0 auto;
+    max-width: 1600px;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.shortItemInfo {
+    position: sticky;
+    top: 112px;
+    display: block;
+    flex-shrink: 0;
+    width: 475px;
+}
+
+.reviewsBlock {
+    width: calc(100% - 475px);
+    padding-right: 48px;
+    box-sizing: border-box;
+
+    .reviewsPhotos {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        overflow: hidden;
+        border: 1px solid #e9e9e9;
+        border-radius: 4px;
+
+        h3 {
+            flex-shrink: 0;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .usersPhotos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            justify-items: center;
+            height: 170px;
+            margin: 10px;
+            position: relative;
+            list-style: none;
+
+        }
+
+        .userPhotosItem {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
+    .leaveReview {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        margin: 20px 0;
+        border: 1px solid #e9e9e9;
+        border-radius: 4px;
+
+        h2 {
+            width: 100%;
+            margin-right: 24px;
+            font-size: 20px;
+        }
+
+        .leaveReviewButton {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 140px;
+            white-space: nowrap;
+            line-height: normal;
+        }
+    }
+}
+
+.info {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    width: 100%;
+}
+
+.photoAndName {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #e9e9e9;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    flex: auto;
+}
+
+.photoContainer {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    margin-right: 24px;
+    position: relative;
+    display: block;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+}
+
+.name {
+    max-width: 100%;
+    overflow: visible;
+    text-overflow: ellipsis;
+    white-space: normal;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 900px) {
+    .reviewsBlock {
+        width: 100%;
+        padding-right: 20px;
+    }
+
+    .shortItemInfo {
+        width: 0;
+    }
+}

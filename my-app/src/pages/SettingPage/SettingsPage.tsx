@@ -3,10 +3,11 @@ import { Button, Col, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Settings.module.scss';
-import SettingsMenu from '../../components/SettingsMenu/SettingsMenu';
+import SettingsMenu from '../../components/Settings/SettingsMenu/SettingsMenu';
 import { logout } from 'store/user/user';
 import cn from 'classnames';
 import { useEffect } from 'react';
+import UserShouldLogin from 'components/UserShouldLogin/UserShouldLogin';
 
 const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const SettingsPage = () => {
   }, [location]);
 
   if (!isAuth) {
-    return <h1>You should login to see this page</h1>;
+    return <UserShouldLogin pageName="Settings" />;
   }
 
   return (

@@ -7,6 +7,7 @@ import { UserType } from 'store/user/user-types';
 import { renderWithRedux } from '../../tests/helpers/renderWithRedux';
 import { MemoryRouter } from 'react-router-dom';
 
+// WIP fix test: SyntaxError: Cannot use import statement outside a module
 describe(SettingPage, () => {
   it('should render a SettingPage', () => {
     const { getByTestId } = renderWithRedux({
@@ -54,7 +55,7 @@ describe(SettingPage, () => {
       component: <SettingPage />,
     });
 
-    const name = getByText('You should login to see this page');
+    const name = getByText('You should be logged in to see Settings page');
     expect(name).toBeInTheDocument();
   });
 });

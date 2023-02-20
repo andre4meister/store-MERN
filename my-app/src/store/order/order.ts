@@ -1,24 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OrderType } from './order-types';
+import { OrderStatus, OrderType } from './order-types';
 
 export interface OrderInitialState {
-  orders: OrderType[];
+  order: OrderType;
+  orderStatus: OrderStatus | '';
 }
 
 export const initialOrderState: OrderInitialState = {
-  orders: [],
+  order: {} as OrderType,
+  orderStatus: '',
 };
 
 const orderReducer = createSlice({
   name: 'order',
   initialState: initialOrderState,
   reducers: {
-    setOrders(state, action: PayloadAction<OrderType[]>) {
-      state.orders = action.payload;
+    setOrder(state, action: PayloadAction<OrderType>) {
+      state.order = action.payload;
+    },
+    setOrderStatus(state, action: PayloadAction<OrderStatus>) {
+      state.orderStatus = action.payload;
     },
   },
 });
 
-export const {} = orderReducer.actions;
+export const { setOrder, setOrderStatus } = orderReducer.actions;
 
 export default orderReducer.reducer;

@@ -17,7 +17,11 @@ const getUsers: Handler = async (req, res: Response) => {
   try {
     let users;
     if (req.params.id) {
-      users = await User.findById(req.params.id).populate(['likedItems', 'orders', 'cart']);
+      users = await User.findById(req.params.id).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
 
       if (!users) {
         return res.status(404).send({ message: 'Such user doesn`t exist' });
@@ -25,7 +29,11 @@ const getUsers: Handler = async (req, res: Response) => {
       return res.status(200).send(deletePassword(users._doc));
     }
 
-    users = await User.find().populate(['likedItems', 'orders', 'cart']);
+    users = await User.find().populate([
+      { path: 'likedItems', populate: { path: 'reviews' } },
+      'orders',
+      { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+    ]);
 
     res.status(200).json(deletePassword(users));
   } catch (error) {
@@ -46,7 +54,11 @@ const updateUser: Handler = async (req, res) => {
       user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         upsert: true,
-      }).populate(['likedItems', 'orders', 'cart']);
+      }).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
 
       return res.status(200).json(deletePassword(user._doc));
     } else {
@@ -63,9 +75,9 @@ const addUserLikedItem: Handler = async (req, res) => {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
 
-    let user = await User.findById(req.params.userId);
+    let user = await User.findOne({ _id: req.params.userId, likedItems: { $in: [req.body.itemId] } });
 
-    if (!!user) {
+    if (!user) {
       user = await User.findByIdAndUpdate(
         req.params.userId,
         { $push: { likedItems: req.body.itemId } },
@@ -73,11 +85,15 @@ const addUserLikedItem: Handler = async (req, res) => {
           new: true,
           upsert: true,
         },
-      ).populate(['likedItems', 'orders', 'cart']);
+      ).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
 
       return res.status(200).json(deletePassword(user._doc));
     } else {
-      return res.status(404).json({ message: 'Such user doesn`t exist' });
+      return res.status(400).json({ message: 'Item is already added' });
     }
   } catch (error) {
     res.status(500).json({ message: 'Some error has occured', error: error });
@@ -100,8 +116,11 @@ const deleteUserLikedItem: Handler = async (req, res) => {
           new: true,
           upsert: true,
         },
-      ).populate(['likedItems', 'orders', 'cart']);
-
+      ).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
@@ -113,6 +132,7 @@ const deleteUserLikedItem: Handler = async (req, res) => {
 
 const addItemToUserCart: Handler = async (req, res) => {
   try {
+    const { itemId, userId, quantity } = req.body;
     if (!req.params.userId) {
       return res.status(404).json({ message: 'Id wasn`t denoted' });
     }
@@ -120,20 +140,26 @@ const addItemToUserCart: Handler = async (req, res) => {
     let user = await User.findById(req.params.userId);
 
     if (!!user) {
-      user = await User.findByIdAndUpdate(
-        req.params.userId,
-        { $push: { cart: req.body.itemId } },
-        {
-          new: true,
-          upsert: true,
-        },
-      ).populate(['likedItems', 'orders', 'cart']);
+      const itemIndex = user.cart.findIndex((item: any) => item.item.toString() === itemId);
 
+      if (itemIndex === -1) {
+        user.cart.push({ item: itemId, quantity });
+      } else {
+        user.cart[itemIndex].quantity = quantity;
+      }
+
+      await user.save();
+      user = await User.findById(req.params.userId).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
       return res.status(200).json(deletePassword(user._doc));
     } else {
       return res.status(404).json({ message: 'Such user doesn`t exist' });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Some error has occured', error: error });
   }
 };
@@ -149,12 +175,16 @@ const deleteItemFromUserCart: Handler = async (req, res) => {
     if (!!user) {
       user = await User.findByIdAndUpdate(
         req.params.userId,
-        { $pull: { cart: req.body.itemId } },
+        { $pull: { cart: { item: req.body.itemId } } },
         {
           new: true,
           upsert: true,
         },
-      ).populate(['likedItems', 'orders', 'cart']);
+      ).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
 
       return res.status(200).json(deletePassword(user._doc));
     } else {
@@ -184,7 +214,11 @@ const updateUserPassword: Handler = async (req, res) => {
       }
 
       const newHashedPassword = await bcrypt.hash(req.body.new, 12);
-      user = await User.findByIdAndUpdate(req.params.id, { password: newHashedPassword }, { new: true });
+      user = await User.findByIdAndUpdate(req.params.id, { password: newHashedPassword }, { new: true }).populate([
+        { path: 'likedItems', populate: { path: 'reviews' } },
+        'orders',
+        { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
+      ]);
       res.status(200).json(user._doc);
     } else {
       res.status(400).json({ message: 'Incorrect old password' });

@@ -3,6 +3,7 @@ import { UserType } from '../user-model/user-types';
 
 interface ReviewType {
   _id: string;
+  createdAt: string;
   author: UserType;
   text: string;
   point: number;
@@ -10,6 +11,12 @@ interface ReviewType {
 }
 
 const reviewScheme = new Schema<ReviewType>({
+  createdAt: {
+    type: String,
+    required: true,
+    sparse: true,
+    partialFilterExpression: { name: { $exists: true } },
+  },
   text: {
     type: String,
     partialFilterExpression: { name: { $exists: true } },

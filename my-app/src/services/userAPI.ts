@@ -1,6 +1,6 @@
 import { WithToken } from 'store/commonTypes';
 import { UpdateUserType, WithIdType } from 'store/user/user';
-import { ChangeUserCartAndWishItemsType, UserType } from 'store/user/user-types';
+import { ChangeUserCartAndWishItemsType, FetchCartItem, UserType } from 'store/user/user-types';
 import getToken from 'utils/getToken';
 import axiosInstance from './axios';
 
@@ -107,7 +107,7 @@ export class UserAPI {
     }
   }
 
-  static async addItemToUserCart(data: ChangeUserCartAndWishItemsType) {
+  static async addItemToUserCart(data: FetchCartItem) {
     try {
       const response = await axiosInstance.put<UserType>(
         `users/addItemToUserCart/${data.userId}`,
@@ -119,7 +119,7 @@ export class UserAPI {
     }
   }
 
-  static async deleteItemFromUserCart(data: ChangeUserCartAndWishItemsType) {
+  static async deleteItemFromUserCart(data: FetchCartItem) {
     try {
       const response = await axiosInstance.put<UserType>(
         `users/deleteItemFromUserCart/${data.userId}`,

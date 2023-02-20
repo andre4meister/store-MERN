@@ -1,4 +1,5 @@
 import { ItemType } from 'store/item/item-types';
+import { ShoppingCartItem } from 'store/order/order-types';
 
 export const countLikedItems = (likedItems: ItemType[]) => {
   if (likedItems) {
@@ -7,7 +8,7 @@ export const countLikedItems = (likedItems: ItemType[]) => {
   return 0;
 };
 
-export const countCartItems = (cartItems: ItemType[]) => {
+export const countCartItems = (cartItems: ShoppingCartItem[]) => {
   if (cartItems) {
     return cartItems.length;
   }

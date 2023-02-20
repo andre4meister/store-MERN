@@ -1,9 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
+import { ReviewApi } from 'services/reviewAPI';
 import { UserAPI } from 'services/userAPI';
 import { addNotification } from 'store/alert/alert';
 import { toggleIsLoading } from 'store/app/app';
 import { WithToken } from 'store/commonTypes';
+import { ReviewType } from 'store/item/item-types';
+import { RootState } from 'store/store';
 import {
   UserReducerStateType,
   setUserData,
@@ -14,7 +17,7 @@ import {
   LoginFormWithNavigate,
   RegistrationFormWithNavigate,
 } from './user';
-import { ChangeUserCartAndWishItemsType, UserType } from './user-types';
+import { ChangeUserCartAndWishItemsType, FetchCartItem, UserType } from './user-types';
 
 export const fetchLogin = createAsyncThunk('user/login', async (args: LoginFormWithNavigate, thunkAPI) => {
   try {
@@ -157,19 +160,21 @@ export const dispatchLogout = createAsyncThunk<void, void>('user/dispatch-logout
 
 export const fetchGetProfile = createAsyncThunk<void, void>('user/get-profile', async (data, thunkAPI) => {
   try {
-    thunkAPI.dispatch(toggleIsLoading(true));
     const stringifyUserData = localStorage.getItem('userData') || 'null';
     const userData: UserType = JSON.parse(stringifyUserData);
-
+    console.log(userData);
     if (userData) {
+      thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.getUserById(userData._id)) as AxiosResponse<UserType>;
       if (response.status === 200) {
         thunkAPI.dispatch(setUserData(response.data));
       } else {
         thunkAPI.dispatch(loginFailure('expire token'));
       }
+      thunkAPI.dispatch(toggleIsLoading(false));
+    } else {
+      thunkAPI.dispatch(logout());
     }
-    thunkAPI.dispatch(toggleIsLoading(false));
   } catch (e) {
     console.log(e);
   }
@@ -185,8 +190,7 @@ export const fetchAddItemToLiked = createAsyncThunk<void, ChangeUserCartAndWishI
         const user: UserType = response.data;
         thunkAPI.dispatch(setUserData(user));
       } else {
-        thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
-        thunkAPI.dispatch(loginFailure('Couldn`t like item, try again'));
+        thunkAPI.dispatch(addNotification({ message: 'You already added this item', type: 'error' }));
       }
       thunkAPI.dispatch(toggleIsLoading(false));
     } catch (error) {
@@ -217,7 +221,7 @@ export const fetchDeleteItemFromLiked = createAsyncThunk<void, ChangeUserCartAnd
   },
 );
 
-export const fetchAddItemToUserCart = createAsyncThunk<void, ChangeUserCartAndWishItemsType>(
+export const fetchAddItemToUserCart = createAsyncThunk<void, FetchCartItem>(
   'user/addItemToUserCart',
   async (data, thunkAPI) => {
     try {
@@ -239,7 +243,7 @@ export const fetchAddItemToUserCart = createAsyncThunk<void, ChangeUserCartAndWi
   },
 );
 
-export const fetchDeleteItemFromUserCart = createAsyncThunk<void, ChangeUserCartAndWishItemsType>(
+export const fetchDeleteItemFromUserCart = createAsyncThunk<void, FetchCartItem>(
   'user/deleteItemFromUserCart',
   async (data, thunkAPI) => {
     try {
@@ -252,6 +256,48 @@ export const fetchDeleteItemFromUserCart = createAsyncThunk<void, ChangeUserCart
       } else {
         thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
         thunkAPI.dispatch(loginFailure('Couldn`t delete item from the cart, try again'));
+      }
+      thunkAPI.dispatch(toggleIsLoading(false));
+    } catch (error) {
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
+      thunkAPI.dispatch(loginFailure('Something is wrong Thunk'));
+    }
+  },
+);
+
+export const fetchReviewsByUserId = createAsyncThunk<ReviewType[] | undefined, { userId: string }>(
+  'user/fetchReviewsByUserId',
+  async (data, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(toggleIsLoading(true));
+      const response = (await ReviewApi.getReviews(data)) as AxiosResponse<ReviewType[]>;
+      if (response?.status === 200) {
+        return response.data;
+      } else {
+        thunkAPI.dispatch(
+          addNotification({ message: "Couldn`t upload user's reviews, try again later", type: 'error' }),
+        );
+        thunkAPI.dispatch(loginFailure('Couldn`t delete item from the cart, try again'));
+      }
+      thunkAPI.dispatch(toggleIsLoading(false));
+    } catch (error) {
+      thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
+      thunkAPI.dispatch(loginFailure('Something is wrong Thunk'));
+    }
+  },
+);
+
+export const fetchDeleteUserReview = createAsyncThunk<void, { reviewId: string }>(
+  'user/fetchDeleteUserReview',
+  async (data, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(toggleIsLoading(true));
+      const response = (await ReviewApi.deleteReview(data.reviewId)) as AxiosResponse<ReviewType>;
+      if (response?.status === 200) {
+        thunkAPI.dispatch(addNotification({ message: 'Review was deleted', type: 'success' }));
+      } else {
+        thunkAPI.dispatch(addNotification({ message: 'Some error has occured, try again later', type: 'error' }));
+        thunkAPI.dispatch(loginFailure('Couldn`t delete review, try again'));
       }
       thunkAPI.dispatch(toggleIsLoading(false));
     } catch (error) {

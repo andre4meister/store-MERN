@@ -1,0 +1,68 @@
+@import '../../../styles/variables.module.scss';
+
+.order {
+    padding: 16px;
+    border: 1px solid #e9e9e9;
+    border-radius: 4px;
+}
+
+.orderPanelHeader {
+    position: relative;
+    padding-left: 0 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 40px;
+
+    // flex-direction: column;
+    .status {
+        width: 40%;
+        // width: 100%;    
+    }
+
+    .price {
+        width: 20%;
+        // width: 100%;    
+    }
+
+}
+
+.columnHeaderInfo {
+    display: flex;
+    flex-direction: column;
+
+    &:first-child {
+        font-size: 12px;
+        color: #797878;
+    }
+
+    &:last-child {
+        font-size: 14px;
+    }
+}
+
+.orderItemsPhotos {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 40%;
+    margin-right: 24px;
+
+    // width: 100%;
+
+    .imageContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+
+        img {
+            max-width: 100%;
+            width: auto;
+            max-height: 100%;
+            height: auto;
+        }
+    }
+}
