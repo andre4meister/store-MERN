@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npx nodemon",
     "build": "rimraf ./build && npx tsc && ncp package.json build/package.json",
+    "start": "npm run build && node build/index.js",
     "lint": "npx eslint ./src",
     "lint-fix": "npx eslint ./src --fix"
   },
