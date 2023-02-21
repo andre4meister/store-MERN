@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx nodemon",
-    "build": "npx tsc && ncp package.json build/package.json",
+    "build": "rimraf ./build npx tsc && ncp package.json build/package.json",
     "start": "node build/index.js",
     "lint": "npx eslint ./src",
     "lint-fix": "npx eslint ./src --fix"
