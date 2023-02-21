@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon",
-    "build": "rimraf ./build && npx tsc && cp package.json build/package.json",
+    "build": "rimraf ./build && npx tsc && ncp package.json build/package.json",
     "start": "node build/index.js",
     "lint": "npx eslint ./src",
     "lint-fix": "npx eslint ./src --fix"
@@ -39,6 +39,7 @@
     "@typescript-eslint/parser": "^5.47.0",
     "eslint": "^8.30.0",
     "husky": "^8.0.2",
+    "ncp": "^2.0.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.1",
     "rimraf": "^3.0.2",
