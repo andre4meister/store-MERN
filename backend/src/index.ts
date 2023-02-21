@@ -1,5 +1,5 @@
 import express, { json } from 'express';
-import cors from 'cors';
+// import cors from 'cors';
 import { userRouter } from './user-model/user-router';
 import { authRouter } from './authorization/auth-router';
 import mongoose from 'mongoose';
@@ -28,7 +28,7 @@ const app = express();
 app
   .use(json())
   .use(validationMiddleware)
-  .use(cors({ origin: '*' }))
+  // .use(cors({ origin: '*' }))
   .use('/users', userRouter)
   .use('/auth', oneOf([registerValidation, loginValidation]), authRouter)
   .use('/category', oneOf([createCategoryValidation]), categoryRouter)
