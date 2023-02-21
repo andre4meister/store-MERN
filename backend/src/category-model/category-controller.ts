@@ -1,5 +1,5 @@
 import { Handler, Response } from 'express';
-import { Category } from './category-types';
+import { Category } from './category-types.js';
 
 const getAllCategories: Handler = async (req, res: Response) => {
   try {

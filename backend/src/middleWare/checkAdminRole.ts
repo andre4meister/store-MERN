@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../user-model/user-controller';
+import { User } from '../user-model/user-controller.js';
 
 export default async function checkAdminRole(req: Request, res: Response, next: NextFunction) {
   if (req.method === 'OPTIONS') {

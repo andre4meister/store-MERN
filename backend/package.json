@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "npx nodemon",
     "build": "npx tsc && ncp package.json build/package.json",
-    "start": "node index.js",
+    "start": "node build/index.js",
     "lint": "npx eslint ./src",
     "lint-fix": "npx eslint ./src --fix"
   },

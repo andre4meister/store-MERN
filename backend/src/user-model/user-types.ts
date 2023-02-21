@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
-import { OrderType } from '../order-model/order-types';
-import { ItemType, ShopingCartItem } from '../product-model/item-types';
+import { OrderType } from '../order-model/order-types.js';
+import { ItemType, ShopingCartItem } from '../product-model/item-types.js';
 
 enum ShipmentMethodType {
   NovaPoshta = 'Nova Poshta',

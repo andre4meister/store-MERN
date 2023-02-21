@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import authMiddleware from '../middleWare/authMiddleware';
+import authMiddleware from '../middleWare/authMiddleware.js';
 import {
   deleteUser,
   getUsers,
@@ -9,7 +9,7 @@ import {
   addUserLikedItem,
   deleteItemFromUserCart,
   deleteUserLikedItem,
-} from './user-controller';
+} from './user-controller.js';
 
 const userRouter = Router();
 

@@ -1,7 +1,7 @@
 import { Handler, Response } from 'express';
 import mongoose from 'mongoose';
-import { User } from '../user-model/user-controller';
-import { orderScheme, OrderStatus } from './order-types';
+import { User } from '../user-model/user-controller.js';
+import { orderScheme, OrderStatus } from './order-types.js';
 
 const Order = mongoose.model('order', orderScheme);
 

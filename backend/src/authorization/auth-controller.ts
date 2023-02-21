@@ -1,12 +1,11 @@
 import { RequestHandler } from 'express';
-import { User } from '../user-model/user-controller';
+import { User } from '../user-model/user-controller.js';
 import bcrypt from 'bcrypt';
-import { userSchema, UserType } from '../user-model/user-types';
+import { UserType } from '../user-model/user-types.js';
 import { ValidationError, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import secretJWT from '../utils/secret';
-import { deletePassword } from '../utils/deletePassword';
-import { Document, Model, Types } from 'mongoose';
+import secretJWT from '../utils/secret.js';
+import { deletePassword } from '../utils/deletePassword.js';
 
 const saltRounds = 12;
 

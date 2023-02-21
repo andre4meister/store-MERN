@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
-import { CategoryType, SubCategoryType } from '../category-model/category-types';
-import { ReviewType } from '../review-model/review-types';
-import { ObjectWithStringValues } from '../types/commonTypes';
+import { CategoryType, SubCategoryType } from '../category-model/category-types.js';
+import { ReviewType } from '../review-model/review-types.js';
+import { ObjectWithStringValues } from '../types/commonTypes.js';
 
 interface ShopingCartItem {
   item: ItemType;

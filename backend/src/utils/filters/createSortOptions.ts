@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ItemType } from '../../product-model/item-types';
+import { ItemType } from '../../product-model/item-types.js';
 
 export default function createSortOptions(sort: string) {
   const sortOptions = {} as mongoose.QueryOptions<ItemType>;

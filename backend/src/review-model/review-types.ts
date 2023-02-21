@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { UserType } from '../user-model/user-types';
+import { UserType } from '../user-model/user-types.js';
 
 interface ReviewType {
   _id: string;

@@ -1,8 +1,8 @@
 import { Handler, Response } from 'express';
 import mongoose from 'mongoose';
-import { Item } from '../product-model/item-controller';
-import createSortOptions from '../utils/filters/createSortOptions';
-import { reviewScheme } from './review-types';
+import { Item } from '../product-model/item-controller.js';
+import createSortOptions from '../utils/filters/createSortOptions.js';
+import { reviewScheme } from './review-types.js';
 
 const Review = mongoose.model('review', reviewScheme);
 

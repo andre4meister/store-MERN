@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import secretJWT from '../utils/secret';
+import secretJWT from '../utils/secret.js';
 
 export default function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.method === 'OPTIONS') {

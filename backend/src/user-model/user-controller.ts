@@ -2,8 +2,8 @@ import { Handler, Response } from 'express';
 import mongoose, { Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import { userSchema, UserType } from './user-types';
-import { deletePassword } from '../utils/deletePassword';
+import { userSchema, UserType } from './user-types.js';
+import { deletePassword } from '../utils/deletePassword.js';
 
 const User = mongoose.model<UserType, Model<UserType, any, any>>('user', userSchema);
 

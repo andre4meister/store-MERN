@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
-import { OrderStatus, PaymentStatus } from '../order-model/order-types';
-import { ShipmentMethodType } from '../user-model/user-types';
+import { OrderStatus, PaymentStatus } from '../order-model/order-types.js';
+import { ShipmentMethodType } from '../user-model/user-types.js';
 
 const registerValidation = [
   check('email', 'Incorrect email').isEmail().isLength({ min: 8, max: 26 }),

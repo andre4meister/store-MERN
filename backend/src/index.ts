@@ -1,13 +1,13 @@
 import express, { json } from 'express';
 import cors from 'cors';
-import { userRouter } from './user-model/user-router';
-import { authRouter } from './authorization/auth-router';
+import { userRouter } from './user-model/user-router.js';
+import { authRouter } from './authorization/auth-router.js';
 import mongoose from 'mongoose';
-import { itemRouter } from './product-model/item-router';
-import { subCategoryRouter } from './subCategoty-model/subCategory-router';
-import { categoryRouter } from './category-model/category-router';
-import { orderRouter } from './order-model/order-router';
-import validationMiddleware from './middleWare/validationMiddleware';
+import { itemRouter } from './product-model/item-router.js';
+import { subCategoryRouter } from './subCategoty-model/subCategory-router.js';
+import { categoryRouter } from './category-model/category-router.js';
+import { orderRouter } from './order-model/order-router.js';
+import validationMiddleware from './middleWare/validationMiddleware.js';
 import { oneOf } from 'express-validator';
 import {
   createCategoryValidation,
@@ -17,8 +17,8 @@ import {
   createSubCategoryValidation,
   loginValidation,
   registerValidation,
-} from './utils/validationChecks';
-import { reviewRouter } from './review-model/review-router';
+} from './utils/validationChecks.js';
+import { reviewRouter } from './review-model/review-router.js';
 
 const mongoConnectURL =
   'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';

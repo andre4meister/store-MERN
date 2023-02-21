@@ -1,4 +1,4 @@
-import { UserType } from '../user-model/user-types';
+import { UserType } from '../user-model/user-types.js';
 
 // WIP fix any type
 export const deletePassword = (users: any) => {

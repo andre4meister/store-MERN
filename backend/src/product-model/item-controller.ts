@@ -1,9 +1,9 @@
 import { Handler, Response } from 'express';
 import mongoose from 'mongoose';
-import { Category, SubCategory } from '../category-model/category-types';
-import { createFilterForItems } from '../utils/filters/createFilterForItems';
-import createSortOptions from '../utils/filters/createSortOptions';
-import { itemScheme } from './item-types';
+import { Category, SubCategory } from '../category-model/category-types.js';
+import { createFilterForItems } from '../utils/filters/createFilterForItems.js';
+import createSortOptions from '../utils/filters/createSortOptions.js';
+import { itemScheme } from './item-types.js';
 
 const Item = mongoose.model('item', itemScheme);
 
