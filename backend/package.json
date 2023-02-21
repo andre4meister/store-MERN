@@ -6,9 +6,15 @@
   "scripts": {
     "dev": "npx nodemon",
     "build": "rimraf ./build && npx tsc",
-    "start": "npm run build &&  node build/index",
+    "start": "npm run build && npm install && node build/index",
     "lint": "npx eslint ./src",
     "lint-fix": "npx eslint ./src --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run test"
+    }
   },
   "keywords": [],
   "author": "",
