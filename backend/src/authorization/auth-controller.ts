@@ -45,6 +45,7 @@ const register: RequestHandler<
 
     return res.status(201).json(deletePassword(user._doc));
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Some error has occured', error });
   }
 };
@@ -56,7 +57,7 @@ const login: RequestHandler<
 > = async (req, res) => {
   try {
     const errors = validationResult(req);
-    const secret = process.env.JWtSECRET as string;
+    const secret = process.env.JWTSECRET as string;
 
     const { email, password } = req.body;
     if (!errors.isEmpty()) {
@@ -84,6 +85,7 @@ const login: RequestHandler<
       res.json({ token, userData: deletePassword(userData._doc) });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send({ message: 'Some error has occured' });
   }
 };
