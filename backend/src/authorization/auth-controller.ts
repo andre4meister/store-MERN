@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import { UserType } from '../user-model/user-types.js';
 import { ValidationError, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import secretJWT from '../utils/secret.js';
 import { deletePassword } from '../utils/deletePassword.js';
 
 const saltRounds = 12;
@@ -57,6 +56,7 @@ const login: RequestHandler<
 > = async (req, res) => {
   try {
     const errors = validationResult(req);
+    const secret = process.env.JWtSECRET as string;
 
     const { email, password } = req.body;
     if (!errors.isEmpty()) {
@@ -80,7 +80,7 @@ const login: RequestHandler<
     if (!isMatch) {
       return res.status(401).json({ message: 'Incorrect password or email' });
     } else {
-      const token = jwt.sign({ email, password, _id: userData._id }, secretJWT, { expiresIn: '2h' });
+      const token = jwt.sign({ email, password, _id: userData._id }, secret, { expiresIn: '2h' });
       res.json({ token, userData: deletePassword(userData._doc) });
     }
   } catch (error) {

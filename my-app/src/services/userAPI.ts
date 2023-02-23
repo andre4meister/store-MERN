@@ -1,7 +1,7 @@
 import { WithToken } from 'store/commonTypes';
 import { UpdateUserType, WithIdType } from 'store/user/user';
 import { ChangeUserCartAndWishItemsType, FetchCartItem, UserType } from 'store/user/user-types';
-import getToken from 'utils/getToken';
+import getToken from 'utils/commonUtils/getToken';
 import axiosInstance from './axios';
 
 export interface LoginFormType {

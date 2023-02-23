@@ -1,9 +1,12 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { dispatchLoginFailure } from 'store/user/user-thunks';
-import getToken from 'utils/getToken';
+import getToken from 'utils/commonUtils/getToken';
 
+const backendUrl =
+  process.env.NODE_ENV === 'production' ? 'http://localhost:5000/' : 'https://web-store-mern.onrender.com/';
+console.log(backendUrl);
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/',
+  baseURL: backendUrl,
   withCredentials: false,
 });
 
@@ -14,7 +17,7 @@ axiosInstance.interceptors.request.use(
     if (config.headers) {
       if (token) config.headers.Authorization = `Bearer ${token}`;
       config.headers['Content-Type'] = 'application/json';
-      config.headers['Access-Control-Allow-Origin'] = 'http://localhost:5000';
+      config.headers['Access-Control-Allow-Origin'] = backendUrl;
     }
 
     return config;
@@ -31,7 +34,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 || error.response?.status === 403) {
       dispatchLoginFailure(error.response?.data.message);
     }
-    const response = error.response;
+    const response = error.response ? error.response : error;
     return response;
   },
 );

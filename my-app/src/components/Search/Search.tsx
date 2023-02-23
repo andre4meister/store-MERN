@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { ObjectWithStringValues } from 'store/commonTypes';
 import { setSearchedItems } from 'store/dashboard/dashboard';
 import { ItemType } from 'store/item/item-types';
-import { debounce } from 'utils/debounce';
+import { debounce } from 'utils/commonUtils/debounce';
 import styles from './Search.module.scss';
 
 interface SearchProps {

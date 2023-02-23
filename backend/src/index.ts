@@ -1,4 +1,5 @@
 import express, { json } from 'express';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import { userRouter } from './user-model/user-router.js';
 import { authRouter } from './authorization/auth-router.js';
@@ -20,8 +21,9 @@ import {
 } from './utils/validationChecks.js';
 import { reviewRouter } from './review-model/review-router.js';
 
-const mongoConnectURL =
-  'mongodb+srv://andreameister:andrik2016@mybackend.hoha1tw.mongodb.net/?retryWrites=true&w=majority';
+dotenv.config();
+
+const mongoConnectURL = process.env.MONGODB_URL as string;
 const PORT = process.env.PORT || 5000;
 const app = express();
 

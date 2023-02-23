@@ -10,18 +10,23 @@ import { fetchGetProfile } from 'store/user/user-thunks';
 import Loader from 'components/Loader/Loader';
 import { fetchCategories } from 'store/dashboard/dashboard-thunks';
 import AppErrorPage from 'components/AppErrorPage/AppErrorPage';
+import { selectIsAuth, selectLoginError } from 'store/user/user-selectors';
+import { selectAppError, selectIsLoading } from 'store/app/app-selectors';
 
 const { Header, Sider, Content } = Layout;
 
 const MainLayout: FC = () => {
-  const { loginError, isAuth } = useAppSelector((state) => state.userReducer);
-  const { appError, isLoading } = useAppSelector((state) => state.appReducer);
-
-  const dispatch = useAppDispatch();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
+  const isAuth = useAppSelector(selectIsAuth);
+  const loginError = useAppSelector(selectLoginError);
+  const appError = useAppSelector(selectAppError);
+  const isLoading = useAppSelector(selectIsLoading);
+  const categories = useAppSelector((state) => state.dashboardReducer.categories);
+
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
 
   useEffect(() => {
     dispatch(fetchCategories({}));
@@ -37,7 +42,7 @@ const MainLayout: FC = () => {
     }
   }, [loginError, location.pathname]);
 
-  if (isAuth === undefined) {
+  if (isAuth === undefined || categories.length === 0) {
     return <Loader />;
   }
 
@@ -50,15 +55,7 @@ const MainLayout: FC = () => {
         <Header className={styles.header}>
           <MyHeader setIsCollapsed={setIsSidebarCollapsed} />
         </Header>
-        <Content className={styles.content}>
-          {isLoading || isAuth === undefined ? (
-            <Loader />
-          ) : appError ? (
-            <AppErrorPage appError={appError} />
-          ) : (
-            <Outlet />
-          )}
-        </Content>
+        <Content className={styles.content}>{appError ? <AppErrorPage appError={appError} /> : <Outlet />}</Content>
       </Layout>
     </Layout>
   );

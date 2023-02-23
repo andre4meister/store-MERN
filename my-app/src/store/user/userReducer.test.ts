@@ -24,6 +24,8 @@ const initialState: UserReducerStateType = {
   },
   loginError: '',
   isAuth: true,
+  userOrders: [],
+  userReviews: [],
 };
 
 describe('userReducer', () => {

@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import secretJWT from '../utils/secret.js';
 
 export default function authMiddleware(req: Request, res: Response, next: NextFunction) {
+  const secret = process.env.JWTSECRET as string;
+
   if (req.method === 'OPTIONS') {
     next();
     return;
@@ -14,7 +15,7 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
       return res.status(401).json({ message: 'Unauthorized', error: 'expire token' });
     }
 
-    const decodedData = jwt.verify(token, secretJWT);
+    const decodedData = jwt.verify(token, secret);
     req.body.decodedData = decodedData;
     next();
   } catch (error) {

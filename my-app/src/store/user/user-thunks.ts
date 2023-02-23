@@ -6,7 +6,6 @@ import { addNotification } from 'store/alert/alert';
 import { toggleIsLoading } from 'store/app/app';
 import { WithToken } from 'store/commonTypes';
 import { ReviewType } from 'store/item/item-types';
-import { RootState } from 'store/store';
 import {
   UserReducerStateType,
   setUserData,
@@ -16,6 +15,7 @@ import {
   WithIdType,
   LoginFormWithNavigate,
   RegistrationFormWithNavigate,
+  setUserReviews,
 } from './user';
 import { ChangeUserCartAndWishItemsType, FetchCartItem, UserType } from './user-types';
 
@@ -162,7 +162,7 @@ export const fetchGetProfile = createAsyncThunk<void, void>('user/get-profile', 
   try {
     const stringifyUserData = localStorage.getItem('userData') || 'null';
     const userData: UserType = JSON.parse(stringifyUserData);
-    console.log(userData);
+
     if (userData) {
       thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await UserAPI.getUserById(userData._id)) as AxiosResponse<UserType>;
@@ -265,14 +265,15 @@ export const fetchDeleteItemFromUserCart = createAsyncThunk<void, FetchCartItem>
   },
 );
 
-export const fetchReviewsByUserId = createAsyncThunk<ReviewType[] | undefined, { userId: string }>(
+export const fetchReviewsByUserId = createAsyncThunk<void, { userId: string }>(
   'user/fetchReviewsByUserId',
   async (data, thunkAPI) => {
+    console.log('thunk');
     try {
       thunkAPI.dispatch(toggleIsLoading(true));
       const response = (await ReviewApi.getReviews(data)) as AxiosResponse<ReviewType[]>;
       if (response?.status === 200) {
-        return response.data;
+        thunkAPI.dispatch(setUserReviews(response.data));
       } else {
         thunkAPI.dispatch(
           addNotification({ message: "Couldn`t upload user's reviews, try again later", type: 'error' }),

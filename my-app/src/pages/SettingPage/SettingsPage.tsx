@@ -8,13 +8,13 @@ import { logout } from 'store/user/user';
 import cn from 'classnames';
 import { useEffect } from 'react';
 import UserShouldLogin from 'components/UserShouldLogin/UserShouldLogin';
+import { selectUserReducerState } from 'store/user/user-selectors';
 
 const SettingsPage = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const { isAuth, userData } = useAppSelector((state) => state.userReducer);
+  const { isAuth, userData } = useAppSelector(selectUserReducerState);
   const { email, userName } = userData;
 
   useEffect(() => {

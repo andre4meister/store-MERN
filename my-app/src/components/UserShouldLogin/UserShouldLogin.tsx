@@ -23,10 +23,10 @@ const UserShouldLogin: FC<UserShouldLoginProps> = ({ pageName }) => {
         status="info"
         title={`You should be logged in to see ${pageName} page`}
         extra={[
-          <Button type="primary" size="large" onClick={onLoginClick}>
+          <Button type="primary" size="large" onClick={onLoginClick} key="sign in">
             Sign in
           </Button>,
-          <Button type="primary" size="large" onClick={onSignUpClick}>
+          <Button type="primary" size="large" onClick={onSignUpClick} key="sign up">
             Sign up
           </Button>,
         ]}

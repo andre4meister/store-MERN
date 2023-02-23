@@ -3,32 +3,27 @@ import { CustomPanel } from 'components/Dropdown/DropdownPanel';
 import OrderPanelHeader from 'components/Dropdown/OrderPanelHeader/OrderPanelHeader';
 import OrderItem from 'components/Item/OrderItem/OrderItem';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
-import { useState, useEffect, memo } from 'react';
+import { useEffect, memo } from 'react';
 import { fetchOrdersByUserId } from 'store/order/order-thunks';
-import { OrderType } from 'store/order/order-types';
+import { selectUserData, selectUserOrders } from 'store/user/user-selectors';
 import {} from 'store/user/user-thunks';
 import styles from './UserOrders.module.scss';
 
 const UserOrders = () => {
   const dispatch = useAppDispatch();
-  const { isAuth } = useAppSelector((state) => state.userReducer);
-  const { _id: userId } = useAppSelector((state) => state.userReducer.userData);
-  const [userOrders, setUserOrders] = useState<OrderType[]>([]);
+  const { _id: userId } = useAppSelector(selectUserData);
+  const userOrders = useAppSelector(selectUserOrders);
 
   useEffect(() => {
-    dispatch(fetchOrdersByUserId({ userId })).then((data) => setUserOrders(data.payload as OrderType[]));
-  }, [isAuth, userId]);
-
-  if (isAuth === undefined) {
-    return <h1>Loading...</h1>;
-  }
+    dispatch(fetchOrdersByUserId({ userId }));
+  }, [dispatch, userId]);
 
   return (
     <div className={styles.myReviews}>
       <h1>My orders</h1>
       <div className={styles.container}>
         <Collapse className="order-dropdown" bordered={false}>
-          {userOrders.map((order) => (
+          {(userOrders || []).map((order) => (
             <CustomPanel header={<OrderPanelHeader order={order} />} key={order._id}>
               <div className={styles.orderdetails}>
                 <div className={styles.infoBlock}>

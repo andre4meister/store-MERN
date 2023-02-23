@@ -94,7 +94,6 @@ const OrderPage = () => {
 
   // WIP delete order and change status when unmounting
   // useEffect(() => {
-  //   console.log('render');
   //   return () => {
   //     dispatch(setOrderStatus('' as OrderStatus));
   //     dispatch(setOrder({} as OrderType));

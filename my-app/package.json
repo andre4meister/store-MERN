@@ -1,6 +1,5 @@
 {
   "name": "store-frontend",
-  "homepage": "https://andre4meister.github.io/store-MERN/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

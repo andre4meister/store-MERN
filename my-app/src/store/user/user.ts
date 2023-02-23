@@ -6,6 +6,8 @@ import { PersonalDataType } from 'components/Settings/SettingsForms/PersonalForm
 import { ChangeEmailType } from 'components/Settings/SettingsForms/ChangeLoginForm';
 import { ChangePasswordType } from 'components/Settings/SettingsForms/ChangePasswordForm';
 import { ContactsFormType } from 'components/Settings/SettingsForms/ContactsForm';
+import { ReviewType } from 'store/item/item-types';
+import { OrderType } from 'store/order/order-types';
 
 interface NavigateType {
   navigateFromLogin?: NavigateFunction | (() => void);
@@ -28,12 +30,16 @@ export interface UserReducerStateType {
   isAuth: boolean | undefined;
   loginError: string;
   userData: UserType;
+  userReviews: ReviewType[] | null;
+  userOrders: OrderType[] | null;
 }
 
 export const initialUserState: Omit<UserReducerStateType, 'password'> = {
   userData: {} as UserType,
   loginError: '',
   isAuth: undefined,
+  userOrders: null,
+  userReviews: null,
 };
 
 const userReducer = createSlice({
@@ -56,9 +62,15 @@ const userReducer = createSlice({
       state.isAuth = false;
       state.userData = {} as UserType;
     },
+    setUserReviews(state, action: PayloadAction<ReviewType[]>) {
+      state.userReviews = action.payload;
+    },
+    setUserOrders(state, action: PayloadAction<OrderType[]>) {
+      state.userOrders = action.payload;
+    },
   },
 });
 
-export const { setUserData, loginFailure, logout } = userReducer.actions;
+export const { setUserData, loginFailure, logout, setUserReviews, setUserOrders } = userReducer.actions;
 
 export default userReducer.reducer;
