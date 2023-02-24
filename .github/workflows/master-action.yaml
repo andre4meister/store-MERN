@@ -1,0 +1,36 @@
+name: Master_CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["14.x", "16.x", latest]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: |
+          cd store-MERN/my-app
+          npm ci
+      - name: Lint
+        run: |
+          cd store-MERN/my-app
+          npm run lint
+      - name: Test
+        run: |
+          cd store-MERN/my-app
+          npm run test
+      - name: Deploy
+        if: matrix.node-version == '16.x' && success()
+        run: |
+          cd store-MERN/my-app
+          npm run deploy

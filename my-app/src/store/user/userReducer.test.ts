@@ -30,10 +30,12 @@ const initialState: UserReducerStateType = {
 
 describe('userReducer', () => {
   it('should return the initial state', () => {
-    const expectedState = {
+    const expectedState: UserReducerStateType = {
       userData: {} as UserType,
       loginError: '',
       isAuth: undefined,
+      userOrders: null,
+      userReviews: null,
     };
     expect(userReducer(undefined, { type: '', payload: {} })).toEqual(expectedState);
   });
@@ -59,29 +61,36 @@ describe('userReducer', () => {
       cart: [],
       orders: [],
     };
-    const expectedState = {
+
+    const expectedState: UserReducerStateType = {
       userData,
       loginError: '',
       isAuth: true,
+      userOrders: null,
+      userReviews: null,
     };
     expect(userReducer(undefined, { type: 'user/setUserData', payload: userData })).toEqual(expectedState);
   });
 
   it('should handle logout', () => {
-    const expectedState = {
+    const expectedState: UserReducerStateType = {
       userData: {} as UserType,
       loginError: '',
       isAuth: false,
+      userOrders: [],
+      userReviews: [],
     };
     expect(userReducer(initialState, { type: 'user/logout', payload: {} })).toEqual(expectedState);
   });
 
   it('should handle loginFailure', () => {
     const loginError = 'Invalid credentials';
-    const expectedState = {
+    const expectedState: UserReducerStateType = {
       userData: {} as UserType,
-      loginError,
+      loginError: 'Invalid credentials',
       isAuth: false,
+      userOrders: [],
+      userReviews: [],
     };
     expect(userReducer(initialState, { type: 'user/loginFailure', payload: loginError })).toEqual(expectedState);
   });
