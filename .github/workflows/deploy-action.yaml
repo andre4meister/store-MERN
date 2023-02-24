@@ -1,0 +1,29 @@
+name: Master_CI
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+  workflow_dispatch:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js latest version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "latest"
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy
+        if: matrix.node-version == '16.x' && success()
+        run: |
+          cd my-app
+          npm run deploy
