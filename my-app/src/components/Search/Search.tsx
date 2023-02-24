@@ -1,3 +1,4 @@
+import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import cn from 'classnames';
 import { Dispatch, FC, memo, SetStateAction, useCallback, useEffect } from 'react';
@@ -54,7 +55,7 @@ const MySearch: FC<SearchProps> = ({
         className={styles.searchSpan}
         onFocus={() => setIsSearchedFocused(true)}
         placeholder="I`m looking for..."
-        enterButton="Search"
+        enterButton={<SearchOutlined className={styles.searchIcon} />}
         size="large"
         onChange={debouncedChangeHandler}
         loading={isSearching}

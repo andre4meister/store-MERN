@@ -1,10 +1,26 @@
 @import '../../styles/variables.module.scss';
 
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 30px;
+    height: 100%;
+}
+
 .collapsedButton {
     position: fixed;
     left: 10px;
     top: 16px;
     padding: 5px 8px;
+}
+
+.modalCatalog {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
 }
 
 .menuIcon {
@@ -20,8 +36,27 @@
     align-items: center;
     width: 200px;
     height: 64px;
-    margin-left: $indent-large;
+    margin-left: 20px;
     cursor: pointer;
+
+    img {
+        width: 100%;
+    }
+}
+
+.modalCatalog {
+    width: 80% !important;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    min-width: 180px;
+    height: 100%;
+    width: 35%;
+    position: relative;
 }
 
 .catalog {
@@ -76,5 +111,28 @@
 @media screen and (max-width: 900px) {
     .catalog {
         display: none;
+    }
+
+    .modalCatalog {
+        width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .logo__image {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+
+    .login {
+        display: none;
+    }
+
+    .menuItem {
+        display: none !important;
+    }
+
+    .menuCart {
+        display: block !important;
     }
 }

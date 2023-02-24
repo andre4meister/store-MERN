@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Layout.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { Layout } from 'antd';
+import { Layout, Modal } from 'antd';
 import MyHeader from 'components/Header/Header';
 import { UserAPI } from 'services/userAPI';
 import { fetchGetProfile } from 'store/user/user-thunks';
@@ -12,8 +12,9 @@ import { fetchCategories } from 'store/dashboard/dashboard-thunks';
 import AppErrorPage from 'components/AppErrorPage/AppErrorPage';
 import { selectIsAuth, selectLoginError } from 'store/user/user-selectors';
 import { selectAppError, selectIsLoading } from 'store/app/app-selectors';
+import { CloseOutlined } from '@ant-design/icons';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 const MainLayout: FC = () => {
   const navigate = useNavigate();
@@ -48,10 +49,19 @@ const MainLayout: FC = () => {
 
   return (
     <Layout>
-      <Sider theme="dark" className={styles.sider} collapsedWidth={0} collapsed={isSidebarCollapsed}>
-        <Sidebar />
-      </Sider>
-      <Layout>
+      {isSidebarCollapsed ? null : (
+        <Modal
+          bodyStyle={{ padding: 0, backgroundColor: '#001529' }}
+          open={!isSidebarCollapsed}
+          closeIcon={<CloseOutlined style={{ color: '#fff' }} />}
+          footer={null}
+          className={styles.sidebarModal}
+          onCancel={() => setIsSidebarCollapsed((prev) => !prev)}
+        >
+          <Sidebar />
+        </Modal>
+      )}
+      <Layout className={styles.antLayout}>
         <Header className={styles.header}>
           <MyHeader setIsCollapsed={setIsSidebarCollapsed} />
         </Header>

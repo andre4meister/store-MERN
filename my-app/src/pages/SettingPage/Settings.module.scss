@@ -13,14 +13,14 @@
 
 .content {
     padding: $indent-large;
+    background-color: white;
     border-left: 2px solid #e9e9e9;
     width: 100%;
     max-width: 1195px;
-    margin-right: 0 auto;
 
     h1 {
-       font-size: $fontSize-large;
-       margin: $indent-small $indent-medium;
+        font-size: $fontSize-large;
+        margin: $indent-small $indent-medium;
     }
 }
 
@@ -36,13 +36,14 @@
 .name__email {
     font-size: $fontSize-xxsmall !important;
 }
+
 .menu__ul {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
     border-bottom: 2px solid #e9e9e9;
-    padding-bottom: 5px;    
+    padding-bottom: 5px;
 }
 
 .menuItem {
@@ -51,6 +52,7 @@
     display: flex;
     align-items: center;
 }
+
 .profileNavigation {
     color: #001529 !important;
     display: flex;
@@ -95,4 +97,14 @@
 
 .logout {
     margin: $indent-small 0;
+}
+
+@media screen and (max-width: 700px) {
+    .menu {
+        display: none;
+    }
+
+    .content {
+        padding: 5px;
+    }
 }

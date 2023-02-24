@@ -7,7 +7,7 @@ import {
   ShoppingCartOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Badge } from 'antd';
+import { Badge, Modal } from 'antd';
 import Button from 'antd/es/button';
 import Menu from 'antd/es/menu';
 import styles from './Header.module.scss';
@@ -20,6 +20,7 @@ import Catalog from 'components/Catalog/Catalog';
 import { ObjectWithStringValues } from 'store/commonTypes';
 import Loader from 'components/Loader/Loader';
 import { countCartItems, countLikedItems } from 'utils/userUtils/countItems';
+import classNames from 'classnames';
 
 interface MyHeaderProps {
   setIsCollapsed: Dispatch<SetStateAction<boolean>>;
@@ -59,8 +60,17 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
   }
 
   return (
-    <>
-      {catalogIsOpen ? <Catalog /> : null}
+    <div className={styles.headerContainer}>
+      {catalogIsOpen ? (
+        <Modal
+          open={catalogIsOpen}
+          className={styles.modalCatalog}
+          onCancel={() => setCatalogIsOpen(false)}
+          footer={null}
+        >
+          <Catalog />
+        </Modal>
+      ) : null}
       <div className={styles.logo__image} onClick={() => navigate('/')}>
         <img src="https://content2.rozetka.com.ua/widget_logotype/full/original/229862237.svg" alt="Buything logo" />
       </div>
@@ -73,18 +83,20 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
           <p>Catalog</p>
         </Button>
       </div>
-      <MySearch
-        fetchSearchValue={fetchSearchValue}
-        isSearchedFocused={isSearchedFocused}
-        isSearching={isSearching}
-        searchValue={searchValue}
-        searchedItems={searchedItems}
-        setIsSearchedFocused={setIsSearchedFocused}
-        setIsSearching={setIsSearching}
-        setSearchValue={setSearchValue}
-      />
+      <div className={styles.search}>
+        <MySearch
+          fetchSearchValue={fetchSearchValue}
+          isSearchedFocused={isSearchedFocused}
+          isSearching={isSearching}
+          searchValue={searchValue}
+          searchedItems={searchedItems}
+          setIsSearchedFocused={setIsSearchedFocused}
+          setIsSearching={setIsSearching}
+          setSearchValue={setSearchValue}
+        />
+      </div>
       <Menu theme="dark" mode="horizontal" className={styles.menu}>
-        <Menu.Item key="favoutire">
+        <Menu.Item key="favoutire" className={classNames(styles.menuItem)}>
           <NavLink to="favourite">
             <Badge
               status="processing"
@@ -96,7 +108,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
             <HeartOutlined className={styles.menuIcon} />
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="cart">
+        <Menu.Item key="cart" className={classNames(styles.menuItem, styles.menuCart)}>
           <NavLink to="cart">
             <Badge
               status="processing"
@@ -108,7 +120,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
             <ShoppingCartOutlined className={styles.menuIcon} />
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="user">
+        <Menu.Item key="user" className={classNames(styles.menuItem)}>
           <NavLink to="/settings/user-info">
             <UserOutlined className={styles.menuIcon} />
           </NavLink>
@@ -119,7 +131,7 @@ const MyHeader: FC<MyHeaderProps> = ({ setIsCollapsed }) => {
           {isAuth ? 'Logout' : 'Login'}
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
