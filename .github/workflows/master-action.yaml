@@ -19,18 +19,18 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm ci
       - name: Lint
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm run lint
       - name: Test
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm run test
       - name: Deploy
         if: matrix.node-version == '16.x' && success()
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm run deploy

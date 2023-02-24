@@ -16,13 +16,13 @@ jobs:
           node-version: "latest"
       - name: Install Dependencies
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm ci
       - name: Run Lint
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm run lint
       - name: Run Tests
         run: |
-          cd store-MERN/my-app
+          cd my-app
           npm run test
