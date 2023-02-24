@@ -56,7 +56,7 @@ const login: RequestHandler<
 > = async (req, res) => {
   try {
     const errors = validationResult(req);
-    const secret = process.env.JWtSECRET as string;
+    const secret = process.env.JWTSECRET as string;
 
     const { email, password } = req.body;
     if (!errors.isEmpty()) {

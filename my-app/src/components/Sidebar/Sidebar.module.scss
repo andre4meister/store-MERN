@@ -1,0 +1,117 @@
+@import '../../styles/variables.module.scss';
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 320px;
+    padding-left: 10px;
+    padding-top: 20px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 100;
+    background-color: #001529;
+}
+
+.sidebar__header {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 8px 8px 16px;
+    background-color: #001529;
+
+    a {
+        cursor: pointer;
+        text-decoration: none;
+
+        img {
+            height: 24px;
+            vertical-align: middle;
+        }
+    }
+
+    button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: none;
+        border-radius: 4px;
+    }
+}
+
+.sidebar__content {
+    width: 100%;
+    background-color: #ffffff !important;
+    height: 100%;
+
+    .auth {
+        padding: 8px;
+        background-color: #001529;
+    }
+
+    .sidebar__menu {
+        background-color: #001529;
+        padding-top: 4px;
+        list-style: none;
+        overflow: hidden;
+    }
+
+    .sidebar__menuIitem {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 52px;
+        padding: 0 16px;
+        background-color: #001529;
+        color: white;
+        cursor: pointer;
+        transition: $transition;
+
+        &:hover {
+            background-color: white;
+        }
+
+        a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: white;
+            font-size: $fontSize-small;
+
+            &:hover {
+                color: #001529;
+            }
+        }
+
+        .iconContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+            border-radius: 4px;
+
+            span>svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+
+}

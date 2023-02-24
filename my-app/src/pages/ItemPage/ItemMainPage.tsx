@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import React, { Suspense, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
-import { fetchItems } from 'store/dashboard/dashboard-thunks';
 import styles from './ItemPage.module.scss';
 import { fetchItemById } from 'store/item/item-thunks';
 import classNames from 'classnames';

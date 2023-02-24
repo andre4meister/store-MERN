@@ -4,14 +4,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    z-index: 150;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .5);
-    left: 0;
-    top: 64px;
+    min-height: 80vh;
+    height: fit-content;
     padding-left: $indent-medium;
+    position: relative;
 }
 
 .catalog {
@@ -24,8 +21,8 @@
     justify-content: flex-start;
     align-items: flex-start;
     list-style: none;
-    width: 90%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     background-color: white;
 }
 

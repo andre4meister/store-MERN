@@ -3,7 +3,7 @@ import { dispatchLoginFailure } from 'store/user/user-thunks';
 import getToken from 'utils/commonUtils/getToken';
 
 const backendUrl =
-  process.env.NODE_ENV === 'production' ? 'http://localhost:5000/' : 'https://web-store-mern.onrender.com/';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:5000/' : 'https://web-store-mern.onrender.com/';
 console.log(backendUrl);
 const axiosInstance = axios.create({
   baseURL: backendUrl,

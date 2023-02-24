@@ -1,7 +1,7 @@
 import styles from './Dashboard.module.scss';
 import { Button, Col, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import { useEffect } from 'react';
 import { fetchItems } from 'store/dashboard/dashboard-thunks';
@@ -10,13 +10,21 @@ import DashboardNav from 'components/DashoboardNav/DashboardNav';
 import ItemsList from 'components/Item/ItemsList/ItemsList';
 import { dispatchLogout } from 'store/user/user-thunks';
 import { settingsMenuItems } from 'utils/settings/settingsMenu';
+import { selectLikedItems } from 'store/dashboard/dashboard-selectors';
+import { selectIsAuth, selectUserData } from 'store/user/user-selectors';
+import UserAuthMenu from 'components/UserAuthMenu/UserAuthMenu';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
 
-  const { likedItems } = useAppSelector((state) => state.dashboardReducer);
-  const { email, userName, firstName } = useAppSelector((state) => state.userReducer.userData);
-  const { isAuth } = useAppSelector((state) => state.userReducer);
+  const navigate = useNavigate();
+  const likedItems = useAppSelector(selectLikedItems);
+  const { email, userName, firstName } = useAppSelector(selectUserData);
+  const isAuth = Boolean(useAppSelector(selectIsAuth));
+
+  const navigateToLogin = () => {
+    navigate('/login');
+  };
 
   useEffect(() => {
     if (likedItems.length === 0) {
@@ -29,28 +37,7 @@ const Dashboard = () => {
       <Col span={5} push={0} className={styles.userMenu}>
         <DashboardNav />
         <ul className={styles.menu__ul}>
-          <li className={styles.avatar}>
-            {isAuth ? (
-              <NavLink
-                to="/settings/user-info"
-                className={({ isActive }) => cn(styles.profileNavigation, isActive && styles.activeProfileNavigation)}
-              >
-                <div className={styles.userMenuItem__icon}>{firstName ? firstName.charAt(0) : ''}</div>
-                <div className={styles.userMenuItem__name}>
-                  <div className={styles.name__name}>{userName}</div>
-                  <div className={styles.name__email}>{email}</div>
-                </div>
-              </NavLink>
-            ) : (
-              <NavLink
-                to="/login"
-                className={({ isActive }) => cn(styles.profileNavigation, isActive && styles.activeProfileNavigation)}
-              >
-                <div className={styles.userMenuItem__name}>You are not logged in, login</div>
-              </NavLink>
-            )}
-          </li>
-
+          <UserAuthMenu email={email} firstName={firstName} isAuth={isAuth} userName={userName} />
           {settingsMenuItems.map((userMenuItem) => {
             return (
               <li className={styles.userMenuItem} key={userMenuItem.name + userMenuItem.url}>
@@ -65,10 +52,17 @@ const Dashboard = () => {
           })}
         </ul>
         <Row justify="center" align="bottom">
-          <Button className={styles.logout} size="large" type="primary" onClick={() => dispatch(dispatchLogout())}>
-            <LogoutOutlined />
-            <span>Log out</span>
-          </Button>
+          {isAuth ? (
+            <Button className={styles.logout} size="large" type="primary" onClick={() => dispatch(dispatchLogout())}>
+              <LogoutOutlined />
+              <span>Log out</span>
+            </Button>
+          ) : (
+            <Button className={styles.logout} size="large" type="primary" onClick={navigateToLogin}>
+              <LogoutOutlined />
+              <span>Login</span>
+            </Button>
+          )}
         </Row>
       </Col>
       <Col className={styles.content}>
