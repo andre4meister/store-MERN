@@ -11,7 +11,7 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
@@ -23,7 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Deploy
-        if: matrix.node-version == '16.x' && success()
+        if: matrix.node-version == 'latest' && success()
         run: |
           cd my-app
           npm run deploy
+      - name: Trigger Deploy Hook
+        if: matrix.node-version == 'latest' && success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{}' https://api.render.com/deploy/srv-cfqcmrg2i3mh23gjnhpg?key=cebLvGi8l_Y
