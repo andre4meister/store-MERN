@@ -2,16 +2,16 @@ import { Router } from 'express';
 import {
   createSubCategory,
   deleteSubCategory,
-  getAllSubCategories,
-  getSubCategory,
+  list,
+  getById,
   updateSubCategory,
 } from './subCategory-controller.js';
 
 const subCategoryRouter = Router();
 
-subCategoryRouter.get('/', getAllSubCategories);
+subCategoryRouter.get('/', list);
 
-subCategoryRouter.get('/:id', getSubCategory);
+subCategoryRouter.get('/:id', getById);
 
 subCategoryRouter.post('/', createSubCategory);
 

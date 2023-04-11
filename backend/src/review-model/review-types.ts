@@ -13,7 +13,7 @@ interface ReviewType {
 const reviewScheme = new Schema<ReviewType>({
   createdAt: {
     type: String,
-    required: true,
+    required: false,
     sparse: true,
     partialFilterExpression: { name: { $exists: true } },
   },

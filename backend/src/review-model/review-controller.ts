@@ -1,103 +1,90 @@
-import { Handler, Response } from 'express';
-import mongoose from 'mongoose';
-import { Item } from '../product-model/item-controller.js';
+import {Handler, Response} from 'express';
 import createSortOptions from '../utils/filters/createSortOptions.js';
-import { reviewScheme } from './review-types.js';
+import ItemDao from "../dao/item-dao.js";
+import ReviewDao from "../dao/review-dao.js";
 
-const Review = mongoose.model('review', reviewScheme);
 
-const getReviews: Handler = async (req, res: Response) => {
-  try {
-    const sort = req.query.sort as string;
-    const limit = req.query.sort;
-    if (req.query.userId) {
-      const reviews = await Review.find({ author: req.query.userId })
-        .limit(Number(limit) || 30)
-        .sort(createSortOptions(sort))
-        .populate('author', 'userName email');
-      return res.status(200).json(reviews);
+const listByUserId: Handler = async (req, res: Response) => {
+    try {
+        const sort = req.query.sort as string;
+        const userId = req.query.userId as string;
+        const limit = req.query.sort as string;
+
+        if (!userId) {
+            return res.status(400).json({message: 'User id is required'});
+        }
+
+        if (userId) {
+            const reviews = await ReviewDao.list(userId, sort, limit);
+            return res.status(200).json(reviews);
+        }
+
+    } catch (error) {
+        res.status(500).json({message: 'Some error has occurred', error: error});
     }
-
-    const reviews = await Review.find()
-      .populate('author', 'userName email')
-      .limit(Number(limit) || 30)
-      .sort(createSortOptions(sort));
-    if (!reviews) {
-      return res.status(400).json({ message: 'Some error' });
-    }
-
-    res.status(200).json(reviews);
-  } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
-  }
 };
 
 const getReviewById: Handler = async (req, res: Response) => {
-  try {
-    const review = await Review.findById(req.params.id).populate('author', 'userName email');
+    try {
+        const review = await ReviewDao.findById(req.params.id);
 
-    if (!review) {
-      return res.status(400).json({ message: 'Review with such id doesn`t exist' });
+        if (!review) {
+            return res.status(400).json({message: 'Review with such id doesn`t exist'});
+        }
+        res.status(200).json(review);
+    } catch (error) {
+        res.status(500).json({message: 'Some error has occurred', error: error});
     }
-    res.status(200).json(review);
-  } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
-  }
 };
 
 const createReview: Handler = async (req, res: Response) => {
-  try {
-    const { body, itemId } = req.body;
-    const review = await (await Review.create(body)).populate('author', 'userName email');
-    await Item.findByIdAndUpdate(
-      itemId,
-      {
-        $push: { reviews: review._id },
-      },
-      { new: true },
-    );
-    return res.status(201).json(review);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
-  }
+    try {
+        const {body, itemId} = req.body;
+        const review = await ReviewDao.create(body);
+        await ItemDao.updateItemReviews(
+            itemId,
+            review._id,
+            true
+        );
+        return res.status(201).json(review);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Some error has occurred', error: error});
+    }
 };
 
 const updateReview: Handler = async (req, res: Response) => {
-  try {
-    const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true }).populate([
-      'author',
-      'userName email',
-    ]);
+    try {
+        const review = await ReviewDao.findById(req.params.id);
+        if (!review) {
+            return res.status(404).json({message: 'Review with such id was not found'});
+        }
+        await ReviewDao.update(req.params.id, req.body);
 
-    if (!review) {
-      return res.status(404).json({ message: 'Review with such id was not found' });
+        res.status(200).json(review);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Some error has occurred', error: error});
     }
-
-    res.status(200).json(review);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
-  }
 };
 
 const deleteReview: Handler = async (req, res: Response) => {
-  try {
-    const review = await Review.findByIdAndDelete(req.params.reviewId);
-    if (!review) {
-      return res.status(404).json({ message: 'Review with such id was not found' });
-    }
+    const itemId = req.body.itemId;
+    try {
+        const review = await ReviewDao.findById(req.params.reviewId);
+        if (!review) {
+            return res.status(404).json({message: 'Review with such id was not found'});
+        }
 
-    await Item.findOneAndUpdate(
-      { reviews: { $in: [req.params.reviewId] } },
-      {
-        $pull: { reviews: req.params.reviewId },
-      },
-      { new: true },
-    );
-    res.status(200).json(review);
-  } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
-  }
+        await ReviewDao.delete(req.params.reviewId);
+        await ItemDao.updateItemReviews(
+            itemId,
+            review._id,
+            false
+        );
+        res.status(200).json(review);
+    } catch (error) {
+        res.status(500).json({message: 'Some error has occurred', error: error});
+    }
 };
-export { Review, getReviews, getReviewById, createReview, updateReview, deleteReview };
+export {listByUserId, getReviewById, createReview, updateReview, deleteReview};

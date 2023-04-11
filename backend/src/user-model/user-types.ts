@@ -9,9 +9,9 @@ enum ShipmentMethodType {
 }
 
 enum RoleEnum {
-  user = 'user',
   admin = 'admin',
   moderator = 'moderator',
+  user = 'user',
   anonim = 'anonim',
 }
 

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { ItemType } from '../../product-model/item-types.js';
 
-export const createFilterForItems = (query: any) => {
+export const filterItems = (query: any) => {
   const { minPrice, maxPrice, brand, model, isAvailable, name, category, subCategory } = query;
   let filter: mongoose.FilterQuery<ItemType> = {};
 

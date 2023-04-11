@@ -1,10 +1,10 @@
-import { RequestHandler } from 'express';
-import { User } from '../user-model/user-controller.js';
+import {RequestHandler} from 'express';
+import UserDao from "../dao/user-dao.js";
 import bcrypt from 'bcrypt';
-import { UserType } from '../user-model/user-types.js';
-import { ValidationError, validationResult } from 'express-validator';
+import {RoleEnum, UserType} from '../user-model/user-types.js';
+import {ValidationError, validationResult} from 'express-validator';
 import jwt from 'jsonwebtoken';
-import { deletePassword } from '../utils/deletePassword.js';
+import {deletePassword} from '../utils/deletePassword.js';
 
 const saltRounds = 12;
 
@@ -33,7 +33,7 @@ const register: RequestHandler<
     }
 
     const { email, password } = req.body;
-    const isUserExist = await User.findOne({ email });
+    const isUserExist = await UserDao.findByEmail(email);
 
     if (!!isUserExist) {
       return res.status(400).json({ message: 'Such user already exists' });
@@ -41,11 +41,11 @@ const register: RequestHandler<
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     // WIP fix any type  Document<Types.ObjectId, any, Model<UserType, any, UserMethods, any, typeof userSchema>>
-    const user: any = await User.create({ ...req.body, password: hashedPassword, role: 'admin' });
+    const user: any = await UserDao.create(<UserType>{...req.body, password: hashedPassword, role: "user"});
 
     return res.status(201).json(deletePassword(user._doc));
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error });
+    res.status(500).json({ message: 'Some error has occurred', error });
   }
 };
 
@@ -65,11 +65,7 @@ const login: RequestHandler<
         message: 'Incorrect password or email',
       });
     }
-    const userData = await User.findOne({ email }).populate([
-      { path: 'likedItems', populate: { path: 'reviews' } },
-      'orders',
-      { path: 'cart', populate: { path: 'item', populate: { path: 'reviews' } } },
-    ]);
+    const userData = await UserDao.findByEmail(email);
 
     if (!userData) {
       res.status(400).json({ message: 'Such user doesn`t exist' });
@@ -80,11 +76,11 @@ const login: RequestHandler<
     if (!isMatch) {
       return res.status(401).json({ message: 'Incorrect password or email' });
     } else {
-      const token = jwt.sign({ email, password, _id: userData._id }, secret, { expiresIn: '2h' });
+      const token = jwt.sign({ email, password, _id: userData._id, role: userData.role }, secret, { expiresIn: '2h' });
       res.json({ token, userData: deletePassword(userData._doc) });
     }
   } catch (error) {
-    res.status(500).send({ message: 'Some error has occured' });
+    res.status(500).send({ message: 'Some error has occurred' });
   }
 };
 

@@ -80,11 +80,4 @@ const categoryScheme = new Schema<CategoryType>({
   filters: [String],
 });
 
-const Category = mongoose.model('category', categoryScheme);
-const SubCategory = mongoose.model('subCategory', subCategoryScheme);
-
-try {
-} catch (error) {
-  console.log(error);
-}
-export { categoryScheme, subCategoryScheme, CategoryType, FiltersType, SubCategoryType, Category, SubCategory };
+export { categoryScheme, subCategoryScheme, CategoryType, FiltersType, SubCategoryType };
