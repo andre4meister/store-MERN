@@ -1,57 +1,62 @@
 import { Handler, Response } from 'express';
-import { Category } from './category-types.js';
+import CategoryDao from "../dao/category-dao.js";
 
-const getAllCategories: Handler = async (req, res: Response) => {
+const list: Handler = async (req, res: Response) => {
   try {
-    const categories = await Category.find().populate('subCategories');
+    const categories = await CategoryDao.list();
     if (!categories) {
       return res.status(400).json({ message: 'Some error, no such categories' });
     }
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
-const getCategory: Handler = async (req, res: Response) => {
+const getById: Handler = async (req, res: Response) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await CategoryDao.findById(req.params.id);
 
     if (!category) {
       return res.status(400).json({ message: 'category with such id doesn`t exist' });
     }
     res.status(200).json(category);
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
 const createCategory: Handler = async (req, res: Response) => {
   try {
-    const category = await Category.create(req.body);
+    const category = await CategoryDao.create(req.body);
     res.status(201).json(category);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
 const updateCategory: Handler = async (req, res: Response) => {
   try {
-    const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true });
+    const category = await CategoryDao.update(req.params.id, req.body);
     res.status(200).json(category);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
 const deleteCategory: Handler = async (req, res: Response) => {
   try {
-    const category = await Category.findByIdAndDelete(req.params.id);
+    if(!req.params.id) return res.status(400).json({ message: 'No id provided' });
+
+    const category = await CategoryDao.findById(req.params.id);
+    if(!category) return res.status(400).json({ message: 'No category with such id' });
+
+    await CategoryDao.delete(req.params.id);
     res.status(200).json(category);
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
-export { getAllCategories, getCategory, createCategory, updateCategory, deleteCategory };
+export { list, getById, createCategory, updateCategory, deleteCategory };

@@ -1,38 +1,30 @@
 import { Handler, Response } from 'express';
-import mongoose from 'mongoose';
-import { User } from '../user-model/user-controller.js';
-import { orderScheme, OrderStatus } from './order-types.js';
+import UserDao from '../dao/user-dao.js';
+import OrderDao from '../dao/order-dao.js';
+import {OrderStatus} from "./order-types.js";
 
-const Order = mongoose.model('order', orderScheme);
-
-const getAllOrders: Handler = async (req, res: Response) => {
+const listByUserId: Handler = async (req, res: Response) => {
   try {
     const { userId, orderStatus } = req.query;
     if (userId) {
-      const orders = await Order.find({ userId }).populate('items.item');
+      const orders = await OrderDao.listByUserId(userId.toString(), orderStatus?.toString());
       return res.status(200).json(orders);
     }
-
-    const orders = await Order.find();
-    if (!orders) {
-      return res.status(400).json({ message: 'Some error' });
-    }
-    res.status(200).json(orders);
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
-const getOrder: Handler = async (req, res: Response) => {
+const getById: Handler = async (req, res: Response) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await OrderDao.findById(req.params.id);
 
     if (!order) {
       return res.status(400).json({ message: 'Order with such id doesn`t exist' });
     }
     res.status(200).json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
@@ -40,25 +32,23 @@ const createOrder: Handler = async (req, res: Response) => {
   try {
     const { userId, order } = req.body;
     const createdOrder = await (
-      await Order.create({
+      await OrderDao.create({
         ...order,
         orderStatus: OrderStatus.created,
         createdAt: new Date().toLocaleString(),
       })
     ).populate('items.item');
-    await User.findByIdAndUpdate(userId, { $push: { orders: createdOrder._id } });
+    await UserDao.updateUserOrderList(userId, createdOrder._id, true);
     res.status(201).json(createdOrder);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
 const updateOrder: Handler = async (req, res: Response) => {
   try {
-    const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true })
-      .populate('items.item')
-      .exec();
+    const order = await OrderDao.update(req.params.id, req.body);
 
     if (!order) {
       return res.status(400).json({ message: 'Order with such id doesn`t exist' });
@@ -66,32 +56,30 @@ const updateOrder: Handler = async (req, res: Response) => {
     res.status(200).json(order);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
 
 const deleteOrder: Handler = async (req, res: Response) => {
   try {
-    const order = await Order.findByIdAndDelete(req.params.orderId);
+    const order = await OrderDao.findById(req.params.orderId);
 
     if (!order) {
       return res.status(400).json({ message: 'Order with such id doesn`t exist' });
     }
 
     if (order?.orderStatus === OrderStatus.created || order?.orderStatus === OrderStatus.processing) {
-      await User.findByIdAndUpdate(
+      await OrderDao.delete(req.params.orderId);
+      await UserDao.updateUserOrderList(
         req.params.userId,
-        {
-          $pull: { orders: req.params.orderId },
-        },
-        { new: true },
+        req.params.orderId,
+        false,
       );
       return res.status(200).json(order);
     }
-
-    res.status(400).json({ message: 'You cannot delete order when it was proccesed or shipped' });
+    res.status(400).json({ message: 'You cannot delete order when it was processed or shipped' });
   } catch (error) {
-    res.status(500).json({ message: 'Some error has occured', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error: error });
   }
 };
-export { Order, getAllOrders, getOrder, createOrder, updateOrder, deleteOrder };
+export { listByUserId, getById, createOrder, updateOrder, deleteOrder };

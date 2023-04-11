@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createReview, deleteReview, getReviews, getReviewById, updateReview } from './review-controller.js';
+import { createReview, deleteReview, listByUserId, getReviewById, updateReview } from './review-controller.js';
 
 const reviewRouter = Router();
 
-reviewRouter.get('/', getReviews);
+reviewRouter.get('/', listByUserId);
 
 reviewRouter.get('/:id', getReviewById);
 
