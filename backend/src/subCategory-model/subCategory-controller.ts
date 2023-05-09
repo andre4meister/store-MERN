@@ -1,10 +1,12 @@
 import { Handler, Response } from 'express';
 import SubCategoryDao from "../dao/subCategory-dao.js";
+import generateId from "../utils/generateId.js";
+
 const list: Handler = async (req, res: Response) => {
   try {
     const subCategories = await SubCategoryDao.list();
     if (!subCategories) {
-      return res.status(400).json({ message: 'Some error' });
+      return res.status(400).json({ message: 'There is no categories' });
     }
     res.status(200).json(subCategories);
   } catch (error) {
@@ -27,7 +29,8 @@ const getById: Handler = async (req, res: Response) => {
 
 const createSubCategory: Handler = async (req, res: Response) => {
   try {
-    const subCategory = await SubCategoryDao.create(req.body);
+    const body = {...req.body, id: generateId()};
+    const subCategory = await SubCategoryDao.create(body);
     res.status(201).json(subCategory);
   } catch (error) {
     console.log(error);
@@ -37,17 +40,26 @@ const createSubCategory: Handler = async (req, res: Response) => {
 
 const updateSubCategory: Handler = async (req, res: Response) => {
   try {
-    const subCategory = await SubCategoryDao.update(req.params.id, req.body);
+    const [numOfRowsUpdated, updatedSubCategories] = await SubCategoryDao.update(req.params.id, req.body);
+    const subCategory = updatedSubCategories;
+
+    if(!numOfRowsUpdated) return res.status(400).json({ message: `Subcategory with id ${req.params.id} does not exist` });
+
     res.status(200).json(subCategory);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Some error has occurred', error: error });
+    res.status(500).json({ message: 'Some error has occurred', error });
   }
 };
 
 const deleteSubCategory: Handler = async (req, res: Response) => {
   try {
-    const subCategory = await SubCategoryDao.delete(req.params.id);
+    if(!req.params.id) return res.status(400).json({ message: 'No id provided' });
+
+    const subCategory = await SubCategoryDao.findById(req.params.id);
+    if(!subCategory) return res.status(400).json({ message: 'No subcategory with such id' });
+
+    await SubCategoryDao.delete(req.params.id);
     res.status(200).json(subCategory);
   } catch (error) {
     res.status(500).json({ message: 'Some error has occurred', error: error });

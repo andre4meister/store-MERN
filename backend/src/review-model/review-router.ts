@@ -11,7 +11,6 @@ reviewRouter.post('/', createReview);
 
 reviewRouter.put('/:id', updateReview);
 
-// reviewRouter.delete('/:itemId/:reviewId', deleteReview);
 reviewRouter.delete('/:reviewId', deleteReview);
 
 export { reviewRouter };

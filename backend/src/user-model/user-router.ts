@@ -1,20 +1,21 @@
 import { Router } from 'express';
 import {
   deleteUser,
-  getUsers,
+  list,
+  getUserById,
   updateUser,
   updateUserPassword,
   addItemToUserCart,
-  addUserLikedItem,
+  addLikedItem,
   deleteItemFromUserCart,
-  deleteUserLikedItem,
+  deleteLikedItem,
 } from './user-controller.js';
 
 const userRouter = Router();
 
-userRouter.get('/', getUsers);
+userRouter.get('/', list);
 
-userRouter.get('/:id', getUsers);
+userRouter.get('/:id', getUserById);
 
 userRouter.put('/:id', updateUser);
 
@@ -23,8 +24,8 @@ userRouter.put('/change-password/:id', updateUserPassword);
 userRouter.put('/addItemToUserCart/:userId', addItemToUserCart);
 userRouter.put('/deleteItemFromUserCart/:userId', deleteItemFromUserCart);
 
-userRouter.put('/addUserToLikedItems/:userId', addUserLikedItem);
-userRouter.put('/deleteUserFromLikedItems/:userId', deleteUserLikedItem);
+userRouter.put('/addUserToLikedItems/:userId', addLikedItem);
+userRouter.put('/deleteUserFromLikedItems/:userId', deleteLikedItem);
 
 userRouter.delete('/:id', deleteUser);
 
