@@ -1,32 +1,47 @@
-import mongoose, {Model} from 'mongoose';
-import {CategoryType, categoryScheme} from "../category-model/category-types.js";
+import {CategoryType} from "../category-model/category-types.js";
+import {ModelCtor} from "sequelize";
+import CategoryModel, {Category} from "../db/models/Category.js";
 
 class CategoryDao {
-    private categoryDao: Model<CategoryType, any, any>;
+    private categoryDao: ModelCtor<Category>;
 
     constructor() {
-        this.categoryDao = mongoose.model<CategoryType, Model<CategoryType, any, any>>('category', categoryScheme);
+        this.categoryDao = CategoryModel;
     }
 
     async list() {
-        return this.categoryDao.find().populate('subCategories');
+        return await this.categoryDao.findAndCountAll({
+            include: ['subCategories'],
+        });
     }
 
     async findById(categoryId: string) {
-        return this.categoryDao.findById(categoryId).populate('subCategories');
+        return await this.categoryDao.findByPk(categoryId);
     }
 
     async create(category: CategoryType) {
-        return this.categoryDao.create(category);
+        return await this.categoryDao.create(category);
     }
 
     async update(categoryId: string, category: CategoryType) {
-        return this.categoryDao.findByIdAndUpdate(categoryId, category, { new: true, upsert: true })
-            .populate('subCategories')
+        const [numOfRowsUpdated, updatedCategories] = await this.categoryDao.update(
+            category,
+            {
+                where: { id: categoryId },
+                returning: true,
+            }
+        );
+        return [numOfRowsUpdated, updatedCategories[0]];
     }
 
     async delete(categoryId: string) {
-        return this.categoryDao.findByIdAndDelete(categoryId);
+        const numOfRowsDeleted = await this.categoryDao.destroy({
+            where: { id: categoryId },
+        });
+        if (numOfRowsDeleted === 0) {
+            throw new Error(`Category with id ${categoryId} not found`);
+        }
+        return;
     }
 }
 

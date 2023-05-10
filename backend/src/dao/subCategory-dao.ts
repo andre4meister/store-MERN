@@ -1,31 +1,41 @@
-import mongoose, {Model} from 'mongoose';
-import {subCategoryScheme, SubCategoryType} from "../category-model/category-types.js";
+import {ModelCtor} from "sequelize";
+import SubCategoryModel, {SubCategory} from "../db/models/SubCategory.js";
+import {SubCategoryType} from "../category-model/category-types.js";
 
 class SubCategoryDao {
-    private subCategoryDao: Model<SubCategoryType, any, any>;
+    private subCategoryDao: ModelCtor<SubCategory>;
 
     constructor() {
-        this.subCategoryDao = mongoose.model<SubCategoryType, Model<SubCategoryType, any, any>>('subCategory', subCategoryScheme);
+        this.subCategoryDao = SubCategoryModel;
     }
 
     async list() {
-        return this.subCategoryDao.find();
+        return await this.subCategoryDao.findAndCountAll({});
     }
 
     async findById(subCategoryId: string) {
-        return this.subCategoryDao.findById(subCategoryId);
+        return await this.subCategoryDao.findByPk(subCategoryId);
     }
 
-    async create(subCategory: SubCategoryType) {
+    async create(subCategory: SubCategory) {
         return this.subCategoryDao.create(subCategory);
     }
 
     async update(subCategoryId: string, subCategory: SubCategoryType) {
-        return this.subCategoryDao.findByIdAndUpdate(subCategoryId, subCategory, { new: true, upsert: true })
+        const [numOfRowsUpdated, updatedCategories] = await this.subCategoryDao.update(
+            subCategory,
+            {
+                where: { id: subCategoryId },
+                returning: true,
+            }
+        );
+        return [numOfRowsUpdated, updatedCategories[0]];
     }
 
     async delete(subCategoryId: string) {
-        return this.subCategoryDao.findByIdAndDelete(subCategoryId);
+        return this.subCategoryDao.destroy({
+            where: { id: subCategoryId },
+        });
     }
 }
 

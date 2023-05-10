@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { ShopingCartItem } from '../product-model/item-types.js';
+import { ShopingCartItem } from '../item-model/item-types.js';
 import { DeliverMethodType, ShipmentMethodType } from '../user-model/user-types.js';
 
 enum OrderStatus {
@@ -109,4 +109,4 @@ const orderScheme = new Schema<OrderType>({
   },
 });
 
-export { orderScheme, OrderType, UserIdType, PaymentStatus, OrderStatus };
+export { orderScheme, OrderType, UserIdType, PaymentStatus, RecipientInfoType, OrderStatus };

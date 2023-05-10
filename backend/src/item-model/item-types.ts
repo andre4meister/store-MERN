@@ -8,7 +8,7 @@ interface ShopingCartItem {
   quantity: number;
 }
 interface ItemType {
-  readonly _id: string;
+  id: string;
   name: string;
   description: string;
   category: CategoryType;

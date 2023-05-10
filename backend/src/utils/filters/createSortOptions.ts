@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ItemType } from '../../product-model/item-types.js';
+import { ItemType } from '../../item-model/item-types.js';
 
 export default function createSortOptions(sort: string) {
   const sortOptions = {} as mongoose.QueryOptions<ItemType>;
@@ -7,5 +7,5 @@ export default function createSortOptions(sort: string) {
     const [order, property] = sort.split('_');
     sortOptions[property] = order === '1' ? 1 : -1;
   }
-  return sort;
+  return sortOptions;
 }
